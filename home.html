@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Auction Curator | Premium Digital Gallery</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#7b3300",
+                        "secondary": "#006c49",
+                        "surface-container-high": "#e2e7ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-primary-container": "#dad7ff",
+                        "outline": "#777587",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "surface-bright": "#faf8ff",
+                        "surface-container-highest": "#dae2fd",
+                        "tertiary-fixed-dim": "#ffb690",
+                        "outline-variant": "#c7c4d8",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "primary": "#3525cd",
+                        "on-surface-variant": "#464555",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#005236",
+                        "inverse-on-surface": "#eef0ff",
+                        "on-tertiary-fixed": "#341100",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#c3c0ff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-background": "#131b2e",
+                        "primary-fixed": "#e2dfff",
+                        "on-surface": "#131b2e",
+                        "surface-container-low": "#f2f3ff",
+                        "inverse-surface": "#283044",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#6ffbbe",
+                        "background": "#faf8ff",
+                        "surface-dim": "#d2d9f4",
+                        "on-secondary-fixed": "#002113",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#783200",
+                        "primary-container": "#4f46e5",
+                        "tertiary-fixed": "#ffdbca",
+                        "on-secondary-container": "#00714d",
+                        "surface-container": "#eaedff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#a04500",
+                        "on-tertiary-container": "#ffd2bd",
+                        "surface-tint": "#4d44e3",
+                        "secondary-container": "#6cf8bb",
+                        "surface": "#faf8ff",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#dae2fd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-header { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<header class="bg-[#faf8ff]/80 dark:bg-slate-950/80 backdrop-blur-xl docked full-width top-0 sticky z-50 shadow-[0_8px_32px_0_rgba(19,27,46,0.06)]">
+<div class="flex justify-between items-center w-full px-8 h-20">
+<div class="flex items-center gap-12">
+<span class="text-xl font-black text-[#3525cd] dark:text-[#4f46e5] tracking-tighter headline">The Auction Curator</span>
+<div class="hidden md:flex items-center bg-surface-container-low px-4 py-2 rounded-full w-96 group transition-all duration-300 focus-within:ring-2 focus-within:ring-primary/20">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full font-label" placeholder="Search curated collections..." type="text"/>
+</div>
+</div>
+<nav class="hidden lg:flex items-center gap-8 font-manrope font-bold text-on-surface">
+<a class="text-slate-500 dark:text-slate-400 hover:text-[#3525cd] transition-all duration-300" href="#">Admin</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-[#3525cd] transition-all duration-300" href="#">Seller</a>
+<a class="text-[#3525cd] dark:text-[#4f46e5] border-b-2 border-[#3525cd] pb-1" href="#">Buyer</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300 active:scale-95 transform">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant/20">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold headline">Alex Rivera</p>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant">Pro Curator</p>
+</div>
+<img alt="Curator profile avatar" class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/10" data-alt="portrait of a professional man in a tailored suit, studio lighting, sophisticated atmosphere, neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEGiJd0CxA-k7pdL9I7uaz_b5Wt_mZ9COvxBAxgF6h1ySxPl53igcCSNjX-mzC8xUlik4w62JvsvLVmyuAKA2bp_G-oIYdnpxUwtLX1jZaBMBFrITCB8DMNyp9XCik4uDOgWRstNz_QUOnE4Le-dhELEDRrCkqo-a9D36PbAF7064txAarkGhyGxA4RGVp2EbmIecx2-k3DyBBsirMeesCkkIcAs_8remubJwuFG8fa39yNFwI65s_Omjmaw1vpAHrN4lrWTtz14U"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-[1600px] mx-auto px-8 pb-24">
+<!-- Hero Section: Featured Carousel -->
+<section class="mt-8 mb-16">
+<div class="relative w-full h-[600px] rounded-3xl overflow-hidden bg-surface-container-low">
+<img alt="Main Featured Auction" class="w-full h-full object-cover" data-alt="Modern abstract painting with vibrant oil strokes in a high-end gallery setting with soft directional spotlighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzHjxTnsxM0t7MrrH3Yb4-LrQ_taS6ZF1FeESRSXDxVi3HzTiUjKglITq3XjQ3FH4xs7ZNF0TrYigq9kQm-aSbHogppw5wn4d1WMRJ372FbQa_HsGwlpQOkxK7PFnV0YeHUZwIIKO2EASg6l1W9MQTIF2XEiXlJCiOrFB8okh5w5wJHZg5q-VW5zylb9atoUeXNpznZhJWihlBDuPRvrkPK-uje3-Ngnb9abmzGFEqxOLMBEZcweGsFV6Q7tNGolP5cO9_f3GzUiU"/>
+<div class="absolute inset-0 bg-gradient-to-r from-on-surface/80 via-on-surface/40 to-transparent flex flex-col justify-center px-16">
+<div class="inline-flex items-center gap-2 bg-secondary-container text-on-secondary-container px-4 py-1.5 rounded-full mb-6 w-fit">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="text-xs font-bold tracking-widest uppercase font-label">Live Bidding Now</span>
+</div>
+<h1 class="text-6xl font-black text-white leading-tight mb-4 max-w-2xl tracking-tighter">The Vanguard Collection: Contemporary Masterpieces</h1>
+<p class="text-xl text-surface-container-high mb-8 max-w-xl font-body">Exclusive access to primary market releases from emerging global talents. Curated for the discerning collector.</p>
+<div class="flex items-center gap-6">
+<button class="bg-gradient-to-r from-primary to-primary-container text-white px-10 py-4 rounded-full font-bold text-lg hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95">
+                            Bid Now
+                        </button>
+<div class="flex flex-col">
+<span class="text-surface-container-high text-xs uppercase font-label tracking-widest">Current High Bid</span>
+<span class="text-white text-2xl font-black headline tracking-tight">Ξ 14.50</span>
+</div>
+</div>
+</div>
+<div class="absolute bottom-8 right-8 flex gap-3">
+<button class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center hover:bg-white/40 transition-all">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center hover:bg-white/40 transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Categories: Visual Bento -->
+<section class="mb-24">
+<div class="flex items-end justify-between mb-8">
+<div>
+<h2 class="text-3xl font-black headline tracking-tighter mb-2">Explore Departments</h2>
+<p class="text-on-surface-variant font-body">Navigate through our expertly curated specialty categories.</p>
+</div>
+<button class="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all">
+                    View All Categories <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 h-[400px]">
+<div class="md:col-span-2 relative group cursor-pointer overflow-hidden rounded-2xl bg-surface-container">
+<img alt="Fine Art" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Close up of a classic sculpture with dramatic chiaroscuro lighting in a minimal museum space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAafJlYslHCWRsEt_5bpeqNwlWpO3E52G0Pi22R7C4QSiscH2Oq5LWInopQHpire3cHz60m--3VQa_Ws8LHGJRewrL1g0RyOwaiHUEnfWrc1Dqt2iJfJfMOXKo4YO4LSJEu6EjJl2FPBn059uN2UYPstAx__iAlD9mFST8At2B5PL7WGi9HmpUQmFHeQEbjEiIGtSN2PysZKuuF7_ww22UpI3TftGMNfgW21mdWjPnujIxwAFaTOp0RAGHYwxkygvpQX8Ni15DRKrQ"/>
+<div class="absolute inset-0 bg-on-surface/40 flex flex-col justify-end p-8">
+<h3 class="text-white text-3xl font-black headline">Fine Art</h3>
+<p class="text-white/80 font-body">1,240 Items</p>
+</div>
+</div>
+<div class="relative group cursor-pointer overflow-hidden rounded-2xl bg-surface-container">
+<img alt="Tech &amp; Gadgets" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Sleek silver futuristic laptop and headphones on a minimalist glass desk, high-tech aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlL1ocL1a2sTlh3or_FQXFbiJTID3aULgkUS85spBjFiVKnHgZPerWFYS12FOdx7uchW3AOztbTLN4wIcaADMtxEBzhoim9nSwbXVuwFd6w0nhaLrXZYLKiIylqh5ItfFV_phyLLE7n0BsroMBWiHP3VsUnh3zdfJyHwqM5Me6nimlZfADtAzkttnS9J_TpblRKfmdx0dflbdxTfhL1BXDKNU6usPnelfFHQCTwAHHMivg9zlko1ZIQO3yWSHh8QJWJsMzd451IbA"/>
+<div class="absolute inset-0 bg-on-surface/40 flex flex-col justify-end p-8">
+<h3 class="text-white text-xl font-black headline">Tech &amp; Innovation</h3>
+<p class="text-white/80 font-body">480 Items</p>
+</div>
+</div>
+<div class="relative group cursor-pointer overflow-hidden rounded-2xl bg-surface-container">
+<img alt="Collectibles" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Rare vintage limited edition red sneakers displayed in a high-end glass case with glowing ambient light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1d06cC-EGP4mmIUbJX9Alub8qshj7WsOHskAxW_ctfOESVglVbbxeTWE81hwyEzHXvmN3pSHhZ5Jjb3JxeIBLA-XGZEuwEKOxAL_wtLO8Mtcx6lhuOZA7MIyUxdacRfL4gK63Of3DBqPvKF3vx5UftgWB9dlllfkre2ffMIyJJ-GaDuQWx2yIkkRdtxkR-a4I5MQdiaU_GcybR1wYF8Xo-MdkpXPL57eUO4wmNm2awU1U6tQRNGGKd6_ZwywgJxft9zdPUHvH-IA"/>
+<div class="absolute inset-0 bg-on-surface/40 flex flex-col justify-end p-8">
+<h3 class="text-white text-xl font-black headline">Collectibles</h3>
+<p class="text-white/80 font-body">892 Items</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Auctions: The Gallery Grid -->
+<section class="mb-24">
+<div class="flex items-center gap-8 mb-12 border-b border-outline-variant/20">
+<button class="pb-4 text-2xl font-black headline border-b-4 border-primary tracking-tighter">Trending Now</button>
+<button class="pb-4 text-2xl font-bold headline text-on-surface-variant hover:text-on-surface tracking-tighter transition-all">Ending Soon</button>
+<button class="pb-4 text-2xl font-bold headline text-on-surface-variant hover:text-on-surface tracking-tighter transition-all">New Arrivals</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Auction Card 1 -->
+<div class="group bg-surface-container-lowest rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2">
+<div class="relative h-64 overflow-hidden rounded-xl m-4">
+<img alt="Luxury Watch" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Exquisite luxury silver mechanical watch showing intricate gear details, dark moody background, premium product photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8DGfKuEW9IuswK7-xxcfrtO6QvAtAApOkpg5onniZ3ubzEZ19gwlZc1RM6QQG_HxznfNSfDvGFkCKGhX3rCfhV9f631dhN0bbsTLSjDr6PQGQ2phkz7fHQBl6P9IrQ6HIVb2GqaKHGdpFXhXW22-1bGZoI0ZcAertTX5zUnggIJhUgFuzwhpJcy2bfM5LkMGdPrUp9D1huR6XSEZx_B7l1GrP3UhcliGd1XsppQv_omA5tYrnFR1jHaVY67O6JdCVrVhp4zauf3M"/>
+<div class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-[10px] font-bold uppercase tracking-widest font-label">Active</span>
+</div>
+<button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/20 backdrop-blur text-white flex items-center justify-center hover:bg-primary transition-all">
+<span class="material-symbols-outlined text-sm">favorite</span>
+</button>
+</div>
+<div class="px-6 pb-6">
+<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest mb-1">Horology</p>
+<h4 class="text-lg font-black headline tracking-tight mb-4 truncate">Chronos Skeleton v.2 Special Edition</h4>
+<div class="flex justify-between items-end">
+<div>
+<p class="text-xs text-on-surface-variant font-label">Current Bid</p>
+<p class="text-xl font-black headline text-primary">Ξ 4.25</p>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full text-sm font-bold font-label hover:bg-secondary hover:text-white transition-all">
+                                Place Bid
+                            </button>
+</div>
+</div>
+</div>
+<!-- Auction Card 2 -->
+<div class="group bg-surface-container-lowest rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2">
+<div class="relative h-64 overflow-hidden rounded-xl m-4">
+<img alt="Modernist Chair" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Iconic designer lounge chair in a bright minimalist room with large windows and afternoon sun shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEP94Isd2A15WzjRWwjM2LHz7XNL0q73Yo5p_VRtusLFs8DQGL0Q_WyPwlrpRmi9GyaPLIPkbafqH80LZTeLw-fE0e9KGu-DsnY-bQO7UYs-SzlnQ7FhHYFlitF9s2m9Ly3tdJREEkQ1PYZRzhxydY-hIVugLUAUe-Ymo9jY4fgOxhvs1-DZTQrW7d6hMANGLMZj-aWWrlmZKNjQGo9vHMy22oB5_X0Yg5E3YyBKzfE_c7KN9HyK_kUU-LU_PrhUtoCyMKZWW3a6k"/>
+<div class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-[10px] font-bold uppercase tracking-widest font-label">2h Left</span>
+</div>
+<button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/20 backdrop-blur text-white flex items-center justify-center hover:bg-primary transition-all">
+<span class="material-symbols-outlined text-sm">favorite</span>
+</button>
+</div>
+<div class="px-6 pb-6">
+<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest mb-1">Interior Design</p>
+<h4 class="text-lg font-black headline tracking-tight mb-4 truncate">Minimalist Eames Style Lounge</h4>
+<div class="flex justify-between items-end">
+<div>
+<p class="text-xs text-on-surface-variant font-label">Current Bid</p>
+<p class="text-xl font-black headline text-primary">Ξ 1.12</p>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full text-sm font-bold font-label hover:bg-secondary hover:text-white transition-all">
+                                Place Bid
+                            </button>
+</div>
+</div>
+</div>
+<!-- Auction Card 3 -->
+<div class="group bg-surface-container-lowest rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2">
+<div class="relative h-64 overflow-hidden rounded-xl m-4">
+<img alt="Luxury Car" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Classic vintage sports car in a deep racing green color parked on a cobblestone street at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDORXPn4ixJLiyMOBgcupTN6EHBDLuthGrdAJRhtf_ZeuPhdguNCYV8dyJD96QfthVCWSA5cXp2_FLH4roJoOppy6aYt45zn61KrLnV8CV5k5F-ZD4tO_bpnLy1pj1BWpEYKoGZGkZJdSRnMsVAof2ZxHtcC3Zjn_-V1sDHsW665dNyPfs-I1vH_8erjD2BtTQvJbFHF9F6xptBPqy4wVbmGgHA8jfQ147rfbQJkyoe01Njgwok-CK8Ro3gmMPIY2zW4i3v-ct5-kA"/>
+<div class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-[10px] font-bold uppercase tracking-widest font-label">Active</span>
+</div>
+<button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/20 backdrop-blur text-white flex items-center justify-center hover:bg-primary transition-all">
+<span class="material-symbols-outlined text-sm">favorite</span>
+</button>
+</div>
+<div class="px-6 pb-6">
+<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest mb-1">Automotive</p>
+<h4 class="text-lg font-black headline tracking-tight mb-4 truncate">1965 Heritage Roadster - Restored</h4>
+<div class="flex justify-between items-end">
+<div>
+<p class="text-xs text-on-surface-variant font-label">Current Bid</p>
+<p class="text-xl font-black headline text-primary">Ξ 88.00</p>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full text-sm font-bold font-label hover:bg-secondary hover:text-white transition-all">
+                                Place Bid
+                            </button>
+</div>
+</div>
+</div>
+<!-- Auction Card 4 -->
+<div class="group bg-surface-container-lowest rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2">
+<div class="relative h-64 overflow-hidden rounded-xl m-4">
+<img alt="Digital Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Colorful flowing 3D liquid metal abstract background with neon highlights, futuristic digital art" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAudmoXkgEZfKHpBf9QcYZzsoavvDrpLDWld-SIx3zKlDLvB599h_FPiYbHMhi0EFL72wQgkahco3452B3p7vMpZh-tKFwzFSDUX9lZOlHS4JiI6JdxfacJnsJNXXBEivB3nL21pWL9WMd8WjhBMueYdbmqtlJXECbtKMJHfirynlH7mb0QDAnvBRhz4oTlbE9DkQPZanMEiPHhmQMg4nzjjtBKPBKo5TPufhDWRDG3hPz_5G08x5NoVugRX1NDO22H-4dc136VFuQ"/>
+<div class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-[10px] font-bold uppercase tracking-widest font-label">Active</span>
+</div>
+<button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/20 backdrop-blur text-white flex items-center justify-center hover:bg-primary transition-all">
+<span class="material-symbols-outlined text-sm">favorite</span>
+</button>
+</div>
+<div class="px-6 pb-6">
+<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest mb-1">NFT / Digital</p>
+<h4 class="text-lg font-black headline tracking-tight mb-4 truncate">Synthetica #092: Liquid Flow</h4>
+<div class="flex justify-between items-end">
+<div>
+<p class="text-xs text-on-surface-variant font-label">Current Bid</p>
+<p class="text-xl font-black headline text-primary">Ξ 0.85</p>
+</div>
+<button class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full text-sm font-bold font-label hover:bg-secondary hover:text-white transition-all">
+                                Place Bid
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Premium Experience Banner -->
+<section class="bg-inverse-surface rounded-3xl p-16 flex flex-col md:flex-row items-center gap-12 overflow-hidden relative">
+<div class="relative z-10 md:w-1/2">
+<h2 class="text-4xl font-black text-white headline tracking-tighter mb-6">List Your Collection with The Authority</h2>
+<p class="text-surface-container-high font-body text-lg mb-8">Our white-glove curation service handles everything from authentication to final delivery. Experience the highest sell-through rates in the digital market.</p>
+<div class="flex flex-wrap gap-4">
+<button class="bg-white text-on-surface px-8 py-4 rounded-full font-bold hover:bg-surface-container-high transition-all">Start Selling</button>
+<button class="border border-white/30 text-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-all">View Seller Guide</button>
+</div>
+</div>
+<div class="md:w-1/2 flex justify-center relative">
+<div class="w-72 h-72 rounded-full bg-primary/20 blur-3xl absolute top-0"></div>
+<img alt="Seller Support" class="w-full max-w-sm rounded-2xl shadow-2xl relative z-10 rotate-3 group-hover:rotate-0 transition-transform duration-500" data-alt="close up of a professional woman holding a luxury tablet in a bright white creative workspace" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVGjHTJg3pnyqWNgYVRP91OFoSCXyXxxoHbagKYqrs7Ie81acWb7Xz-zuTe2V95uB7_ON6ZHg1G0-9s7Jr6NpEs_9_BPsJUzQC3aCs-j25BikFtROXz9bYec8NNCzFKhJ9uwMssIPMnJYWvVKp-5ZxOYyEhMSpN_D4q-H_mIo6peB9zYrSSD0KNT7yaP-ldQbCZS8LwH7BQQAtouOTjqwmQoLICsU1-40Hemlc99H3XUNMVaeLX_PLhG71e5FOCuGn4jZt5GSyGO0"/>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low pt-20 pb-12 border-t border-outline-variant/10">
+<div class="max-w-[1600px] mx-auto px-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
+<div class="lg:col-span-2">
+<span class="text-2xl font-black text-[#3525cd] tracking-tighter headline mb-6 block">The Auction Curator</span>
+<p class="text-on-surface-variant font-body mb-8 max-w-sm leading-relaxed">Redefining the auction experience through premium curation, real-time technology, and a global network of verified collectors.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-sm">alternate_email</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-sm">share</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-sm">link</span>
+</a>
+</div>
+</div>
+<div>
+<h5 class="font-black headline mb-6 uppercase text-xs tracking-widest text-on-surface-variant">Auctions</h5>
+<ul class="space-y-4 font-body text-sm text-on-surface">
+<li><a class="hover:text-primary transition-all" href="#">Live Now</a></li>
+<li><a class="hover:text-primary transition-all" href="#">Upcoming Lots</a></li>
+<li><a class="hover:text-primary transition-all" href="#">Recent Results</a></li>
+<li><a class="hover:text-primary transition-all" href="#">Categories</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-black headline mb-6 uppercase text-xs tracking-widest text-on-surface-variant">Services</h5>
+<ul class="space-y-4 font-body text-sm text-on-surface">
+<li><a class="hover:text-primary transition-all" href="#">Consign an Item</a></li>
+<li><a class="hover:text-primary transition-all" href="#">Valuations</a></li>
+<li><a class="hover:text-primary transition-all" href="#">Corporate Art</a></li>
+<li><a class="hover:text-primary transition-all" href="#">Private Sales</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-black headline mb-6 uppercase text-xs tracking-widest text-on-surface-variant">Company</h5>
+<ul class="space-y-4 font-body text-sm text-on-surface">
+<li><a class="hover:text-primary transition-all" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-all" href="#">Press Center</a></li>
+<li><a class="hover:text-primary transition-all" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-all" href="#">Support Center</a></li>
+</ul>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-outline-variant/10 text-xs text-on-surface-variant font-label gap-6">
+<div class="flex gap-8">
+<span>© 2024 The Auction Curator. All Rights Reserved.</span>
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Terms of Service</a>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-secondary">verified_user</span>
+<span>Secured by CuratorGuard Encryption</span>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Auction Curator | Rare Timepiece Collection</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#7b3300",
+                    "secondary": "#006c49",
+                    "surface-container-high": "#e2e7ff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-primary-container": "#dad7ff",
+                    "outline": "#777587",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "surface-bright": "#faf8ff",
+                    "surface-container-highest": "#dae2fd",
+                    "tertiary-fixed-dim": "#ffb690",
+                    "outline-variant": "#c7c4d8",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "primary": "#3525cd",
+                    "on-surface-variant": "#464555",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "inverse-on-surface": "#eef0ff",
+                    "on-tertiary-fixed": "#341100",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#c3c0ff",
+                    "on-primary-fixed": "#0f0069",
+                    "on-background": "#131b2e",
+                    "primary-fixed": "#e2dfff",
+                    "on-surface": "#131b2e",
+                    "surface-container-low": "#f2f3ff",
+                    "inverse-surface": "#283044",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#6ffbbe",
+                    "background": "#faf8ff",
+                    "surface-dim": "#d2d9f4",
+                    "on-secondary-fixed": "#002113",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#783200",
+                    "primary-container": "#4f46e5",
+                    "tertiary-fixed": "#ffdbca",
+                    "on-secondary-container": "#00714d",
+                    "surface-container": "#eaedff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-container": "#a04500",
+                    "on-tertiary-container": "#ffd2bd",
+                    "surface-tint": "#4d44e3",
+                    "secondary-container": "#6cf8bb",
+                    "surface": "#faf8ff",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#dae2fd"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "1rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-header {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .bid-pulse {
+            box-shadow: 0 0 0 0 rgba(0, 108, 73, 0.4);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 108, 73, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 108, 73, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 108, 73, 0); }
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+<!-- TopNavBar -->
+<header class="bg-[#faf8ff]/80 dark:bg-slate-950/80 backdrop-blur-xl font-manrope font-bold text-on-surface docked full-width top-0 sticky z-50 shadow-[0_8px_32px_0_rgba(19,27,46,0.06)] flex justify-between items-center w-full px-8 h-20">
+<div class="flex items-center gap-8">
+<span class="text-xl font-black text-[#3525cd] dark:text-[#4f46e5] tracking-tighter">The Auction Curator</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-slate-500 dark:text-slate-400 hover:text-[#3525cd] hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300 px-3 py-2 rounded-lg" href="#">Admin</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-[#3525cd] hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300 px-3 py-2 rounded-lg" href="#">Seller</a>
+<a class="text-[#3525cd] dark:text-[#4f46e5] border-b-2 border-[#3525cd] pb-1" href="#">Buyer</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300 active:scale-95 transform transition-transform">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="flex items-center gap-2 pl-2 border-l border-outline-variant/20">
+<img alt="Curator profile avatar" class="w-10 h-10 rounded-full border-2 border-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6t2_J-VmMp2k-cpDIPfXMpNNG7zmomcZUZgtjwIKpgF53NeTemByxyk6olCokLU42mA-esm23zD6yHhGEXECmiOz6VhE19aKq7SCMsKzDOdhHax53E8IzWv3oqH6zc3FKS5bc_ekiETcus2C1BxwI1tPZvCLYn5CPN56YhcSNaKojPPtNsiquKh5t5uGmXm9Xqk6pM690AI88eBvLJ52J9KPlepvtop0N2kzWxhv9cH3RAEfMvYAbBs_df6STdCujf0_MqlRBPZs"/>
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</header>
+<main class="max-w-[1440px] mx-auto px-8 py-12">
+<!-- Live Alert Notification (Simulated Socket.io Toast) -->
+<div class="fixed top-24 right-8 z-[60] flex items-center gap-4 bg-secondary-container text-on-secondary-container px-6 py-4 rounded-xl shadow-xl border border-secondary/10 animate-bounce">
+<span class="material-symbols-outlined" data-icon="notifications_active" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+<div>
+<p class="font-bold text-sm">New bid placed!</p>
+<p class="text-xs opacity-80">Someone just bid $12,450</p>
+</div>
+<button class="ml-4 opacity-50 hover:opacity-100"><span class="material-symbols-outlined text-sm" data-icon="close">close</span></button>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left: Gallery Section -->
+<div class="lg:col-span-7 space-y-6">
+<div class="relative group aspect-[4/3] rounded-xl overflow-hidden bg-surface-container-lowest">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Ultra-close up of a luxury mechanical watch showing intricate gold gears and sapphire crystal with moody dark studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqujc6W766evQE3n0HYnTY2dwDY7BFmLjzCDTqRdOK5hyJOJpH4bdKtnpFF6jRoqC7Yf-Cw1QjpKoTt7XFSLaGA-G-HpSF_ft2wfEm8We8pWdlJVIyGlhDmpFqqZINtAXok7rxa6CetGYPSHsgKpvxDD5QT2HTBhhFS1EeHzB6Hl8eFvoDePYU2ajq0Qi4_QWdg9yzvvcRbwdgGMAAEbc6xwYhdGElwkx6tQUsP9RyHMZFpGTsHbj8OGncppJIDdVDbhxKxJX_r_Q"/>
+<div class="absolute top-6 left-6 flex gap-2">
+<span class="bg-primary/90 backdrop-blur-md text-white px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                            LIVE AUCTION
+                        </span>
+<span class="bg-surface-container-lowest/90 backdrop-blur-md text-on-surface px-4 py-2 rounded-full text-xs font-bold shadow-sm">
+                            LOT #442
+                        </span>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-4">
+<button class="aspect-square rounded-lg overflow-hidden border-2 border-primary ring-offset-2 ring-2 ring-primary/10">
+<img class="w-full h-full object-cover" data-alt="Macro view of watch face with blue steel hands and Roman numerals" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiMdt6lR8buSyhcPfySOIhABSJugfBsG7G3Oifx_M19ix8RVU1sKQ3tk9o5Ei6EdKwFDGeN6nDZYUTclZKWoWkjUaLOeU6VoIDdqsX2bkF7YmeNP5MNE3bUEFD5taUVBBKbkvYQQ8wIQB66oX5tJY2GDHTyuzdRmEzWZxDMdaXJV-IfL5a7fEV2EGZ2II5QcqK6Rxb-FvvDokwS1vbhUDRrFLrkBWlGj8RAb3bVmVa7pRafEoVVn4ON2MtE6DNza-yCUYbfmZYjx4"/>
+</button>
+<button class="aspect-square rounded-lg overflow-hidden opacity-60 hover:opacity-100 transition-opacity bg-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="Side profile of luxury watch showing the crown and elegant leather strap" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQxZrfdGmfUT12LvaG3uTkRx6XUeflpZyBvVPg_vB1Opw99mrHtP5wGlbhJpF0a_f14Na6-xAaFqQmhUUICyG6tLRfMxtDQIq5---OErl8uTHNY2kO6IAw9a5uHwGyMLOgneFJiJWV6AQCpvBf-Lidk2KwrCPNqIJXEHV3QB7BzNfV3AkGvpGwfmocnYXjab1RRB3ewDAAzwxMgPBAAC3T-jI2pQwUx1Uyw6vYO7ThuUZuLJjH7mcCdCTWqL_aY2pS7BPboXfH0Yg"/>
+</button>
+<button class="aspect-square rounded-lg overflow-hidden opacity-60 hover:opacity-100 transition-opacity bg-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="Watch mechanism visible through a transparent case back with ruby bearings" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPUPlOM-CMXmx720CMW5DBEuMB9fOQYJP8NRXDrilHJqighFLFioZtsx5anwTldvyJQoDVv8qUK_NzWeiD18B1Ajpt0gRweVVlYvk7RLSRsQp2v8sSlHU2q9AElluvjZiNqAmpZ01G6qcFHOI3zZM09f67y1otGGlcIvoAkCtr41N3ENwkLuW9s_Npa6AOsdaRjESORfbDpZVRRBO3coW7pGqrWxV7HKI3-hFsDYzOFivmv50nyCVqF0vV3p0QJkluH4q-2bIfaMM"/>
+</button>
+<button class="aspect-square rounded-lg overflow-hidden relative group bg-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="Watch displayed on a leather cushion in a premium mahogany presentation box" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvrsY7M3kVg8RnRHO7hPaeqirok188jPxu_D8RUfvpgHtmThkx1zMYfgv-k4v1ZZeaXme6VUYVg1sckwQudTbnsXHe12c-7wXWDJJRXS1vivPT8jHbkxS5Lgax9_3fq3ecjbS9HU8fpNq4FDHvF8rqz7qucAv5-F5JFx32grTgNwydNzF0ecLwxEN9GH9d2ahJd3fK3okSZ1VwbQKKVBp8uwWFcrZEOjmJBlnNTtghJ1uRRxoWv9cNQOfwZxXw5Ei0pXAwRVXvehE"/>
+<div class="absolute inset-0 bg-on-surface/40 flex items-center justify-center text-white font-bold text-sm">+8</div>
+</button>
+</div>
+</div>
+<!-- Right: Auction Details -->
+<div class="lg:col-span-5 flex flex-col gap-8">
+<section class="space-y-4">
+<nav class="flex items-center gap-2 text-on-surface-variant text-sm font-medium mb-4">
+<span>Horology</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span>Swiss Made</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary">Limited Editions</span>
+</nav>
+<h1 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+                        Patek Philippe <br/><span class="text-on-surface-variant/70 font-light italic">Ref. 5270P Perpetual Calendar</span>
+</h1>
+<p class="text-on-surface-variant leading-relaxed font-light text-lg">
+                        An exquisite platinum perpetual calendar chronograph with a salmon dial. Originally commissioned for a private collection in Geneva, featuring the caliber CH 29-535 PS Q.
+                    </p>
+</section>
+<div class="flex items-center justify-between p-6 bg-surface-container-low rounded-xl">
+<div class="flex items-center gap-4">
+<img alt="Seller avatar" class="w-12 h-12 rounded-full bg-surface-container-high border border-outline-variant/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjnIQ_HkE2G1-EgpX62F2hSuwnbrNSwJ05gbPzJ0vW29O1AQWOJCdm2f6eZF4a47sdMIdTONpRAUgptrXZPj1ismg3s-ug-AHm0XDcAgzli7uZoEQ5aN8ixNTmJwrgJqQE7SN8-WDJEa8uw7LP29Mqfc2vBh_J1vn7I1uL2xnJwY68fXXkNJQtZVl4PLIOFYxyJ5HGBT_35z-7V1iihk-omNy6jlunHAaUmYoNMsYluP6et9GLW7v4qhvqOiT0CHOIH7YydyTli2c"/>
+<div>
+<div class="flex items-center gap-1">
+<span class="font-bold text-sm">Geneva Collectibles</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-xs" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs font-bold tracking-wide">4.9 (124 sales)</span>
+</div>
+</div>
+</div>
+<button class="text-primary text-sm font-bold hover:underline">Contact Seller</button>
+</div>
+<!-- Bidding Interface -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0_32px_64px_-16px_rgba(53,37,205,0.08)] space-y-8 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+<div class="grid grid-cols-2 gap-8 relative">
+<div class="space-y-1">
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Current Bid</span>
+<div class="text-4xl font-headline font-black text-primary">$182,500</div>
+<span class="text-xs text-secondary font-semibold">Reserve met</span>
+</div>
+<div class="space-y-1 text-right">
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Auction Ends In</span>
+<div class="text-3xl font-headline font-bold text-tertiary tabular-nums tracking-tight">02:45:12</div>
+<span class="text-xs text-on-surface-variant">Closing Friday, 10PM EST</span>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-2 mb-2">
+<button class="px-4 py-2 rounded-lg bg-surface-container-high text-on-surface text-xs font-bold hover:bg-primary-fixed transition-colors">+$500</button>
+<button class="px-4 py-2 rounded-lg bg-surface-container-high text-on-surface text-xs font-bold hover:bg-primary-fixed transition-colors">+$1,000</button>
+<button class="px-4 py-2 rounded-lg bg-surface-container-high text-on-surface text-xs font-bold hover:bg-primary-fixed transition-colors">+$5,000</button>
+</div>
+<div class="relative group">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold">$</span>
+<input class="w-full bg-surface-container-low border-2 border-transparent focus:border-primary focus:ring-0 rounded-full py-5 pl-10 pr-6 text-lg font-bold transition-all placeholder:font-normal placeholder:opacity-50" placeholder="Enter bid amount" type="number"/>
+</div>
+<button class="w-full bg-gradient-to-r from-[#3525cd] to-[#4f46e5] text-white py-5 rounded-full font-headline font-extrabold text-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all">
+                            Place Bid
+                        </button>
+<p class="text-[10px] text-center text-on-surface-variant uppercase tracking-tighter opacity-60">By bidding, you agree to our terms of service and buyer's premium</p>
+</div>
+</div>
+<!-- Live Bid History Sidebar -->
+<div class="bg-surface-container-low p-6 rounded-xl space-y-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline font-extrabold text-sm uppercase tracking-widest">Live Bid History</h3>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary bid-pulse"></span>
+<span class="text-[10px] font-bold text-secondary uppercase tracking-wider">Live</span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between bg-surface-container-lowest p-3 rounded-lg border-l-4 border-secondary shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container text-[10px] font-bold">JD</div>
+<div>
+<p class="text-xs font-bold">Julian D.</p>
+<p class="text-[10px] text-on-surface-variant">2 minutes ago</p>
+</div>
+</div>
+<span class="text-sm font-bold font-headline text-secondary">$182,500</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg border-l-4 border-transparent hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface text-[10px] font-bold">RK</div>
+<div>
+<p class="text-xs font-bold">Reuben K.</p>
+<p class="text-[10px] text-on-surface-variant">14 minutes ago</p>
+</div>
+</div>
+<span class="text-sm font-bold font-headline opacity-60">$181,000</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg border-l-4 border-transparent hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface text-[10px] font-bold">AM</div>
+<div>
+<p class="text-xs font-bold">Auction Master</p>
+<p class="text-[10px] text-on-surface-variant">22 minutes ago</p>
+</div>
+</div>
+<span class="text-sm font-bold font-headline opacity-60">$178,500</span>
+</div>
+</div>
+<button class="w-full text-xs font-bold text-primary py-2 hover:bg-primary/5 rounded-lg transition-colors">View All 42 Bids</button>
+</div>
+<!-- Trust Indicators -->
+<div class="flex items-center justify-center gap-12 py-4 border-t border-outline-variant/10">
+<div class="flex flex-col items-center gap-1 opacity-60">
+<span class="material-symbols-outlined text-2xl" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Escrow Protected</span>
+</div>
+<div class="flex flex-col items-center gap-1 opacity-60">
+<span class="material-symbols-outlined text-2xl" data-icon="shipped" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Insured Shipping</span>
+</div>
+<div class="flex flex-col items-center gap-1 opacity-60">
+<span class="material-symbols-outlined text-2xl" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Authenticity Guaranteed</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Details Grid (Bento Style) -->
+<section class="mt-24">
+<h2 class="font-headline text-3xl font-extrabold mb-12">Item Specification</h2>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="md:col-span-2 bg-surface-container-low p-8 rounded-xl space-y-4">
+<span class="material-symbols-outlined text-primary" data-icon="history_edu">history_edu</span>
+<h4 class="font-bold text-lg">Provenance &amp; Condition</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+                        Mint condition (Grade 1). Single-owner collection since 2021. Accompanied by the original Certificate of Origin, presentation box, and a solid platinum case back. Salmon dial shows no signs of oxidation or wear.
+                    </p>
+</div>
+<div class="bg-surface-container-low p-8 rounded-xl flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-tertiary mb-4" data-icon="diamond">diamond</span>
+<h4 class="font-bold text-sm uppercase tracking-widest text-on-surface-variant/70">Material</h4>
+</div>
+<p class="font-headline font-black text-2xl">950 Platinum</p>
+</div>
+<div class="bg-primary p-8 rounded-xl flex flex-col justify-between text-white">
+<div>
+<span class="material-symbols-outlined mb-4" data-icon="settings_suggest" style="font-variation-settings: 'FILL' 1;">settings_suggest</span>
+<h4 class="font-bold text-sm uppercase tracking-widest opacity-70">Movement</h4>
+</div>
+<p class="font-headline font-black text-2xl">Cal. CH 29‑535</p>
+</div>
+<div class="bg-surface-container-low p-8 rounded-xl flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-secondary mb-4" data-icon="straighten">straighten</span>
+<h4 class="font-bold text-sm uppercase tracking-widest text-on-surface-variant/70">Diameter</h4>
+</div>
+<p class="font-headline font-black text-2xl">41.0 mm</p>
+</div>
+<div class="bg-surface-container-low p-8 rounded-xl flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-primary mb-4" data-icon="calendar_month">calendar_month</span>
+<h4 class="font-bold text-sm uppercase tracking-widest text-on-surface-variant/70">Complication</h4>
+</div>
+<p class="font-headline font-black text-2xl">Perp. Calendar</p>
+</div>
+<div class="md:col-span-2 bg-secondary-container text-on-secondary-container p-8 rounded-xl flex items-center justify-between">
+<div class="space-y-2">
+<h4 class="font-headline font-black text-2xl">Expert Appraisal</h4>
+<p class="text-sm opacity-80">Full documentation and appraisal report by Master Watchmaker Jean-Luc Veyrier included with this lot.</p>
+</div>
+<span class="material-symbols-outlined text-6xl opacity-20" data-icon="approval">approval</span>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-surface-container-low mt-24 py-16 px-8 border-t border-outline-variant/10">
+<div class="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="space-y-6">
+<span class="text-2xl font-black text-primary tracking-tighter">The Auction Curator</span>
+<p class="text-on-surface-variant text-sm leading-relaxed">Defining the standard of digital luxury auctions. We curate the world's most sought-after mechanical masterpieces for the modern collector.</p>
+</div>
+<div>
+<h5 class="font-headline font-bold mb-6">Marketplace</h5>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">Current Auctions</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Upcoming Drops</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Past Results</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Private Treaty</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-headline font-bold mb-6">Resources</h5>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">Bidding Guide</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Authenticity Report</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Shipping &amp; Insurance</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Seller Portal</a></li>
+</ul>
+</div>
+<div class="bg-surface-container p-6 rounded-xl space-y-4">
+<h5 class="font-headline font-bold">Curator's Newsletter</h5>
+<p class="text-xs text-on-surface-variant">Get notified of high-value auctions before they go live.</p>
+<div class="flex gap-2">
+<input class="flex-1 bg-surface-container-lowest border-none rounded-lg text-xs px-4 focus:ring-1 focus:ring-primary" placeholder="Email" type="email"/>
+<button class="bg-primary text-white p-2 rounded-lg"><span class="material-symbols-outlined text-sm" data-icon="send">send</span></button>
+</div>
+</div>
+</div>
+<div class="max-w-[1440px] mx-auto mt-16 pt-8 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60">
+<p>© 2024 The Auction Curator. All Rights Reserved.</p>
+<div class="flex gap-8">
+<a href="#">Privacy Policy</a>
+<a href="#">Terms of Use</a>
+<a href="#">Cookie Policy</a>
+</div>
+</div>
+</footer>
+</body></html>

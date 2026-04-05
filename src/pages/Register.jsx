@@ -1,79 +1,127 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const { register } = useContext(AuthContext);
+  
+  const { register, error } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await register(name, email, password);
-      navigate('/');
-    } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
-    }
+    await register(name, email, password);
+    navigate('/dashboard');
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 glass p-8 rounded-xl">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-900">
-            Create a new account
-          </h2>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && <div className="text-red-500 text-center text-sm">{error}</div>}
-          <div className="rounded-md shadow-sm space-y-4">
-            <div>
-              <input
-                type="text"
-                required
-                className="input-field"
-                placeholder="Full Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div>
-              <input
-                type="email"
-                required
-                className="input-field"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <input
-                type="password"
-                required
-                className="input-field"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+    <div className="bg-surface text-on-surface min-h-screen flex flex-col pt-16">
+      <div className="flex-grow flex items-center justify-center p-6 relative overflow-hidden">
+        {/* Abstract Background Shapes for Gallery Feel */}
+        <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-primary-fixed/30 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-[-10%] left-[-5%] w-80 h-80 bg-secondary-container/20 rounded-full blur-3xl"></div>
+
+        {error && (
+          <div className="fixed top-24 right-8 z-[100] max-w-sm w-full">
+            <div className="bg-surface-container-lowest border-l-4 border-error p-4 shadow-[0_8px_32px_0_rgba(19,27,46,0.06)] rounded-xl flex items-start gap-3">
+              <span className="material-symbols-outlined text-error" style={{ fontVariationSettings: "'FILL' 0, 'wght' 400" }}>error</span>
+              <div>
+                <p className="font-headline font-bold text-sm text-on-surface">Registration Failed</p>
+                <p className="text-on-surface-variant text-xs mt-1">{error}</p>
+              </div>
             </div>
           </div>
-          <div>
-            <button type="submit" className="w-full btn-primary flex justify-center py-2 px-4">
-              Register
-            </button>
+        )}
+
+        <main className="w-full max-w-[440px] z-10">
+          {/* Brand Identity */}
+          <div className="text-center mb-10">
+            <h1 className="font-headline text-3xl font-black text-primary tracking-tighter mb-2">Request Invite</h1>
+            <p className="text-on-surface-variant font-medium tracking-tight">Join the exclusive gallery collection.</p>
           </div>
-        </form>
-        <div className="text-center mt-4 text-sm">
-          <Link to="/login" className="font-medium text-brand-600 hover:text-brand-500">
-            Already have an account? Sign in
-          </Link>
-        </div>
+
+          {/* Card */}
+          <div className="bg-surface-container-lowest p-10 rounded-[2rem] shadow-[0_32px_64px_-16px_rgba(19,27,46,0.08)]">
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              
+              <div className="space-y-2">
+                <label className="block font-label text-xs font-bold text-on-surface-variant ml-1" htmlFor="name">Full Name</label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-lg">person</span>
+                  <input
+                    className="input-field"
+                    id="name"
+                    name="name"
+                    placeholder="Collector Name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block font-label text-xs font-bold text-on-surface-variant ml-1" htmlFor="email">Email Address</label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-lg">mail</span>
+                  <input
+                    className="input-field"
+                    id="email"
+                    name="email"
+                    placeholder="curator@gallery.com"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block font-label text-xs font-bold text-on-surface-variant ml-1" htmlFor="password">Password</label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-lg">lock</span>
+                  <input
+                    className="input-field"
+                    id="password"
+                    name="password"
+                    placeholder="••••••••"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Register Button */}
+              <button
+                className="btn-primary"
+                type="submit"
+              >
+                Apply for Access
+              </button>
+            </form>
+
+            {/* Footer */}
+            <p className="text-center mt-10 text-sm text-on-surface-variant font-medium">
+              Already have an account?
+              <Link to="/login" className="text-primary font-bold hover:underline underline-offset-4 ml-1">Log in</Link>
+            </p>
+          </div>
+        </main>
       </div>
+
+      <footer className="p-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold text-outline uppercase tracking-[0.1em] mt-auto">
+        <div className="flex gap-6">
+          <a className="hover:text-primary transition-colors" href="#">Privacy Charter</a>
+          <a className="hover:text-primary transition-colors" href="#">Terms of Sale</a>
+        </div>
+        <p>© 2024 The Auction Curator. High-End Digital Assets.</p>
+      </footer>
     </div>
   );
 };
