@@ -1,20 +1,14 @@
 import React, { useContext } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const Navbar = () => {
-  const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   const location = useLocation();
 
   if (['/login', '/register'].includes(location.pathname)) {
     return null;
   }
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
 
   const getLinkClass = (path) => {
     return location.pathname === path 
@@ -55,15 +49,15 @@ const Navbar = () => {
               <button className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300 active:scale-95 transform">
                 <span className="material-symbols-outlined text-on-surface-variant">notifications</span>
               </button>
-              <div className="flex items-center gap-3 pl-4 border-l border-outline-variant/20">
+              <Link to="/profile" className="flex items-center gap-3 pl-4 border-l border-outline-variant/20 hover:opacity-80 transition-opacity">
                 <div className="text-right hidden sm:block">
                   <p className="text-sm font-bold headline">{user.name}</p>
-                  <button onClick={handleLogout} className="text-[10px] uppercase tracking-widest text-on-surface-variant hover:text-error transition-colors">Log Out</button>
+                  <p className="text-[10px] uppercase tracking-widest text-on-surface-variant">View Profile</p>
                 </div>
                 <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold ring-2 ring-primary/10">
                   {user.name.charAt(0).toUpperCase()}
                 </div>
-              </div>
+              </Link>
             </>
           )}
         </div>
