@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const AuctionListing = () => {
@@ -9,19 +9,24 @@ const AuctionListing = () => {
   // Filtering States
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all'); // 'all', 'active', 'ended'
+  const [endingSoonOnly, setEndingSoonOnly] = useState(false);
   const [groupCategories, setGroupCategories] = useState([]);
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   // Added sort option based on UI
   const [sortOption, setSortOption] = useState('Ending Soonest');
 
-  const CATEGORIES = ['All Categories', 'Fine Art', 'Tech & Innovation', 'Collectibles', 'Horology', 'Automobilia', 'Classic Cars', 'Rare Spirits'];
+  const [dynamicCategories, setDynamicCategories] = useState([]);
 
   useEffect(() => {
     const fetchAuctions = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/auctions');
-        setAuctions(data);
+        const [auctionsRes, categoriesRes] = await Promise.all([
+           axios.get('http://localhost:5000/api/auctions'),
+           axios.get('http://localhost:5000/api/categories')
+        ]);
+        setAuctions(auctionsRes.data);
+        setDynamicCategories(categoriesRes.data);
       } catch (error) {
         console.error('Error fetching auctions:', error);
       } finally {
@@ -55,7 +60,12 @@ const AuctionListing = () => {
     const meetsMin = minPrice === '' || activePrice >= parseFloat(minPrice);
     const meetsMax = maxPrice === '' || activePrice <= parseFloat(maxPrice);
 
-    return matchesSearch && matchesStatus && matchesCategory && meetsMin && meetsMax;
+    // 5. Ending Soon
+    const distanceToEnds = new Date(auction.endTime).getTime() - Date.now();
+    const isEndingSoon = distanceToEnds <= (48 * 60 * 60 * 1000) && distanceToEnds > 0;
+    const matchesEndingSoon = !endingSoonOnly || (auction.status === 'active' && isEndingSoon);
+
+    return matchesSearch && matchesStatus && matchesCategory && meetsMin && meetsMax && matchesEndingSoon;
   }).sort((a, b) => {
      let priceA = a.currentBid > 0 ? a.currentBid : a.startingBid;
      let priceB = b.currentBid > 0 ? b.currentBid : b.startingBid;
@@ -67,6 +77,7 @@ const AuctionListing = () => {
   const clearFilters = () => {
     setSearchTerm('');
     setFilterStatus('all');
+    setEndingSoonOnly(false);
     setGroupCategories([]);
     setMinPrice('');
     setMaxPrice('');
@@ -102,19 +113,22 @@ const AuctionListing = () => {
             <div>
               <h3 className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4 font-headline">Category</h3>
               <div className="space-y-3">
-                {CATEGORIES.slice(1).map(cat => (
-                  <label key={cat} className="flex items-center gap-3 cursor-pointer group">
-                    <input 
-                      checked={groupCategories.includes(cat)}
-                      onChange={() => handleCategoryToggle(cat)}
-                      className="rounded border-outline-variant text-primary focus:ring-primary h-5 w-5 cursor-pointer" 
-                      type="checkbox"
-                    />
-                    <span className={`text-sm font-medium transition-colors ${groupCategories.includes(cat) ? 'text-primary font-bold' : 'text-on-surface group-hover:text-primary'}`}>
-                      {cat}
-                    </span>
-                  </label>
-                ))}
+                {dynamicCategories.map(catItem => {
+                  const catName = catItem.name;
+                  return (
+                    <label key={catItem._id} className="flex items-center gap-3 cursor-pointer group">
+                      <input 
+                        checked={groupCategories.includes(catName)}
+                        onChange={() => handleCategoryToggle(catName)}
+                        className="rounded border-outline-variant text-primary focus:ring-primary h-5 w-5 cursor-pointer" 
+                        type="checkbox"
+                      />
+                      <span className={`text-sm font-medium transition-colors ${groupCategories.includes(catName) ? 'text-primary font-bold' : 'text-on-surface group-hover:text-primary'}`}>
+                        {catName}
+                      </span>
+                    </label>
+                  );
+                })}
               </div>
             </div>
 
@@ -155,6 +169,21 @@ const AuctionListing = () => {
             {/* Status Filter */}
             <div>
               <h3 className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4 font-headline">Status</h3>
+              
+              <div className="mb-4 bg-error-container/30 border border-error/20 p-3 rounded-xl hover:bg-error-container/50 transition-colors">
+                 <label className="flex items-center gap-3 cursor-pointer group">
+                   <input 
+                     checked={endingSoonOnly}
+                     onChange={(e) => setEndingSoonOnly(e.target.checked)}
+                     className="rounded border-outline-variant text-error focus:ring-error h-5 w-5 cursor-pointer accent-error" 
+                     type="checkbox"
+                   />
+                   <span className={`text-sm font-medium transition-colors ${endingSoonOnly ? 'text-error font-black tracking-tight' : 'text-on-surface group-hover:text-error'}`}>
+                     Ends within 48 Hrs 🔥
+                   </span>
+                 </label>
+              </div>
+
               <div className="flex gap-2 p-1 bg-surface-container-high rounded-xl">
                 <button 
                   onClick={() => setFilterStatus('active')}
@@ -246,7 +275,7 @@ const AuctionListing = () => {
                         <div className="grid grid-cols-2 gap-4 mb-6">
                           <div className="bg-surface-container-low p-3 rounded-xl">
                             <span className="block text-[10px] uppercase font-bold text-on-surface-variant mb-1">Current Bid</span>
-                            <span className="text-lg font-black font-headline text-primary">${activePrice.toLocaleString()}</span>
+                            <span className="text-lg font-black font-mono text-primary">${activePrice.toLocaleString()}</span>
                           </div>
                           <div className={`p-3 rounded-xl border ${isActive ? 'bg-tertiary-container/10 border-tertiary/10' : 'bg-surface-container border-outline/10'}`}>
                             <span className={`block text-[10px] uppercase font-bold mb-1 ${isActive ? 'text-tertiary' : 'text-outline'}`}>Status</span>
