@@ -1,19 +1,44 @@
-import React, { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import axios from 'axios';
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [avatarPreview, setAvatarPreview] = useState('');
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
   
-  const { register, error } = useContext(AuthContext);
+  const { register } = useContext(AuthContext);
+  const { showNotification } = useNotification();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await register(name, email, password);
-    navigate('/dashboard');
+    setIsUploading(true);
+    let avatarUrl = '';
+    try {
+      if (avatarFile) {
+        const formData = new FormData();
+        formData.append('image', avatarFile);
+        const { data } = await axios.post('http://localhost:5000/api/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        avatarUrl = data.url;
+      }
+      await register(name, email, password, avatarUrl);
+      showNotification('Your account has been successfully created!', 'success');
+      navigate('/');
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || 'Registration Failed. Please try again.';
+      showNotification(errorMsg, 'error');
+      console.error(err);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -23,19 +48,7 @@ const Register = () => {
         <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-primary-fixed/30 rounded-full blur-3xl"></div>
         <div className="absolute bottom-[-10%] left-[-5%] w-80 h-80 bg-secondary-container/20 rounded-full blur-3xl"></div>
 
-        {error && (
-          <div className="fixed top-24 right-8 z-[100] max-w-sm w-full">
-            <div className="bg-surface-container-lowest border-l-4 border-error p-4 shadow-[0_8px_32px_0_rgba(19,27,46,0.06)] rounded-xl flex items-start gap-3">
-              <span className="material-symbols-outlined text-error" style={{ fontVariationSettings: "'FILL' 0, 'wght' 400" }}>error</span>
-              <div>
-                <p className="font-headline font-bold text-sm text-on-surface">Registration Failed</p>
-                <p className="text-on-surface-variant text-xs mt-1">{error}</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <main className="w-full max-w-[440px] z-10">
+        <main className="w-full max-w-[440px] z-10 mt-8">
           {/* Brand Identity */}
           <div className="text-center mb-10">
             <h1 className="font-headline text-3xl font-black text-primary tracking-tighter mb-2">Request Invite</h1>
@@ -46,6 +59,30 @@ const Register = () => {
           <div className="bg-surface-container-lowest p-10 rounded-[2rem] shadow-[0_32px_64px_-16px_rgba(19,27,46,0.08)]">
             <form className="space-y-6" onSubmit={handleSubmit}>
               
+              <div className="space-y-2">
+                <label className="block font-label text-xs font-bold text-on-surface-variant ml-1">Profile Photo (Optional)</label>
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-surface-container overflow-hidden flex items-center justify-center border border-outline-variant shrink-0">
+                    {avatarPreview ? (
+                      <img src={avatarPreview} alt="Avatar Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="material-symbols-outlined text-outline text-2xl">person</span>
+                    )}
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (e.target.files[0]) {
+                        setAvatarFile(e.target.files[0]);
+                        setAvatarPreview(URL.createObjectURL(e.target.files[0]));
+                      }
+                    }}
+                    className="block w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-container file:text-on-primary-container hover:file:bg-primary/20 cursor-pointer"
+                  />
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <label className="block font-label text-xs font-bold text-on-surface-variant ml-1" htmlFor="name">Full Name</label>
                 <div className="relative">
@@ -101,8 +138,9 @@ const Register = () => {
               <button
                 className="btn-primary"
                 type="submit"
+                disabled={isUploading}
               >
-                Apply for Access
+                {isUploading ? 'Uploading & Applying...' : 'Apply for Access'}
               </button>
             </form>
 

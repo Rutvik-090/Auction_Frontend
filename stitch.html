@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Auction Listings | The Auction Curator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#7b3300",
+                        "secondary": "#006c49",
+                        "surface-container-high": "#e2e7ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-primary-container": "#dad7ff",
+                        "outline": "#777587",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "surface-bright": "#faf8ff",
+                        "surface-container-highest": "#dae2fd",
+                        "tertiary-fixed-dim": "#ffb690",
+                        "outline-variant": "#c7c4d8",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "primary": "#3525cd",
+                        "on-surface-variant": "#464555",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#005236",
+                        "inverse-on-surface": "#eef0ff",
+                        "on-tertiary-fixed": "#341100",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#c3c0ff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-background": "#131b2e",
+                        "primary-fixed": "#e2dfff",
+                        "on-surface": "#131b2e",
+                        "surface-container-low": "#f2f3ff",
+                        "inverse-surface": "#283044",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#6ffbbe",
+                        "background": "#faf8ff",
+                        "surface-dim": "#d2d9f4",
+                        "on-secondary-fixed": "#002113",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#783200",
+                        "primary-container": "#4f46e5",
+                        "tertiary-fixed": "#ffdbca",
+                        "on-secondary-container": "#00714d",
+                        "surface-container": "#eaedff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#a04500",
+                        "on-tertiary-container": "#ffd2bd",
+                        "surface-tint": "#4d44e3",
+                        "secondary-container": "#6cf8bb",
+                        "surface": "#faf8ff",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#dae2fd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .headline { font-family: 'Manrope', sans-serif; }
+        .glass-header {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<header class="bg-[#faf8ff]/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(19,27,46,0.06)] flex justify-between items-center w-full px-8 h-20 docked full-width top-0 sticky z-50">
+<div class="flex items-center gap-8">
+<span class="text-xl font-black text-[#3525cd] dark:text-[#4f46e5] tracking-tighter">The Auction Curator</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="font-manrope font-bold text-on-surface text-slate-500 dark:text-slate-400 hover:text-[#3525cd]" href="#">Admin</a>
+<a class="font-manrope font-bold text-on-surface text-slate-500 dark:text-slate-400 hover:text-[#3525cd]" href="#">Seller</a>
+<a class="font-manrope font-bold text-on-surface text-[#3525cd] dark:text-[#4f46e5] border-b-2 border-[#3525cd] pb-1" href="#">Buyer</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300 active:scale-95 transform">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300 active:scale-95 transform">
+<span class="material-symbols-outlined text-on-surface-variant">account_circle</span>
+</button>
+</div>
+</header>
+<div class="flex min-h-screen">
+<aside class="fixed left-0 h-full w-64 pt-20 bg-[#f2f3ff] dark:bg-slate-900 flex flex-col gap-1 py-6 border-r-0 z-40 hidden lg:flex">
+<div class="px-6 py-4 flex flex-col gap-6">
+<div>
+<h3 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4 font-headline">Category</h3>
+<div class="space-y-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-primary h-5 w-5" type="checkbox"/>
+<span class="text-sm font-medium text-on-surface group-hover:text-primary transition-colors">Fine Art</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="rounded border-outline-variant text-primary focus:ring-primary h-5 w-5" type="checkbox"/>
+<span class="text-sm font-medium text-on-surface group-hover:text-primary transition-colors">Horology</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="rounded border-outline-variant text-primary focus:ring-primary h-5 w-5" type="checkbox"/>
+<span class="text-sm font-medium text-on-surface group-hover:text-primary transition-colors">Classic Cars</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="rounded border-outline-variant text-primary focus:ring-primary h-5 w-5" type="checkbox"/>
+<span class="text-sm font-medium text-on-surface group-hover:text-primary transition-colors">Rare Spirits</span>
+</label>
+</div>
+</div>
+<div>
+<h3 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4 font-headline">Price Range</h3>
+<div class="space-y-4">
+<input class="w-full h-2 bg-outline-variant rounded-lg appearance-none cursor-pointer accent-primary" max="100000" min="0" type="range"/>
+<div class="flex justify-between text-xs font-headline font-bold text-on-surface-variant">
+<span>$0</span>
+<span>$100k+</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4 font-headline">Condition</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed rounded-full text-xs font-semibold cursor-pointer">Mint</span>
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-full text-xs font-semibold cursor-pointer hover:bg-primary-fixed transition-colors">Excellent</span>
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-full text-xs font-semibold cursor-pointer hover:bg-primary-fixed transition-colors">Good</span>
+</div>
+</div>
+<div>
+<h3 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4 font-headline">Status</h3>
+<div class="flex gap-2 p-1 bg-surface-container-high rounded-xl">
+<button class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-surface-container-lowest shadow-sm text-primary">Active</button>
+<button class="flex-1 py-1.5 text-xs font-bold text-on-surface-variant">Ended</button>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 lg:ml-64 p-8 bg-surface">
+<section class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+<div>
+<span class="text-primary font-bold text-sm tracking-widest uppercase">Live Curator Collection</span>
+<h1 class="text-4xl md:text-5xl font-black tracking-tight mt-2 text-on-surface">Discover Masterpieces</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<label class="text-[10px] absolute -top-2 left-3 bg-surface px-1 font-bold text-on-surface-variant uppercase tracking-tighter z-10">Sort By</label>
+<select class="bg-surface border border-outline-variant/30 rounded-xl px-4 py-3 pr-10 text-sm font-semibold text-on-surface focus:ring-2 focus:ring-primary focus:border-transparent outline-none appearance-none cursor-pointer">
+<option>Ending Soonest</option>
+<option>Price: Low to High</option>
+<option>Price: High to Low</option>
+<option>Most Popular</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_8px_32px_0_rgba(19,27,46,0.04)] hover:shadow-[0_12px_48px_0_rgba(19,27,46,0.08)] transition-all duration-300">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="vibrant abstract oil painting with bold strokes of blue and gold on a gallery wall with soft spotlighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABYvFiBZfg1mC5bmrTdbdJxxJqjinMA0bFnJeZDWmxQ90DwSlNFIlb_iL7ZKs6WmNfP446LBKClxrnFb-c07V5dPBIroPd8EvZbonwEPYdBYsObzK6R3FGA4xs7hcdtHDdE83vwOHyo6f6aDaR0PG8js3vGOREiKztEYS73UYTco-uSmWzPM0HmUwqaiUpBL4rkJyufSpScxoae2Jd1X9GFa-lJ6YmNBXBtAOadIeQopJg09vDB9A1XNFd0FwPkJbuKD_aLrALa4Q"/>
+<div class="absolute top-4 left-4 bg-secondary-container/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
+<span class="text-[10px] font-black uppercase tracking-widest text-on-secondary-container">Live Bidding</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold font-headline text-on-surface group-hover:text-primary transition-colors">Fragmented Horizon #04</h3>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-error transition-colors">favorite</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-1">Original Acrylic on Canvas, 2023. Signed by artist.</p>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-low p-3 rounded-xl">
+<span class="block text-[10px] uppercase font-bold text-on-surface-variant mb-1">Current Bid</span>
+<span class="text-lg font-black font-headline text-primary">$12,450</span>
+</div>
+<div class="bg-tertiary-container/10 p-3 rounded-xl border border-tertiary/10">
+<span class="block text-[10px] uppercase font-bold text-tertiary mb-1">Time Left</span>
+<span class="text-lg font-black font-headline text-tertiary">02h 45m</span>
+</div>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98] transition-all">Place Bid</button>
+</div>
+</div>
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_8px_32px_0_rgba(19,27,46,0.04)] hover:shadow-[0_12px_48px_0_rgba(19,27,46,0.08)] transition-all duration-300">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="luxury mechanical chronograph watch with silver dial and leather strap on a velvet cushion macro shot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQA_WjzT_d6HUmnuBLZe6Kw4o5PVujjiKCWcpU67jFV2VI2uZkB5bU6sf9YE75y-kuPJkJ0veL6auvZoAAOnW4I1bFmEfCCsKNjHnBlIJElPGg52HRyqnDyVA9TpkioFzQ-UE29sTMZ1QC9By9yChrxjDxzGscCofop7X_LALn0nqqGprJatTQVn-78p_Fv0NTKbrFxA6IQiQTieS4BL47oBRpFbaHoQcP3zin0_6hoYdKDxiYDt3Ei59cAaARpCqdQ3_y9byOI6I"/>
+<div class="absolute top-4 left-4 bg-secondary-container/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
+<span class="text-[10px] font-black uppercase tracking-widest text-on-secondary-container">Live Bidding</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold font-headline text-on-surface group-hover:text-primary transition-colors">Vacheron Traditionnelle</h3>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-error transition-colors">favorite</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-1">Reference 82172/000R-9382, 18K Rose Gold.</p>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-low p-3 rounded-xl">
+<span class="block text-[10px] uppercase font-bold text-on-surface-variant mb-1">Current Bid</span>
+<span class="text-lg font-black font-headline text-primary">$45,200</span>
+</div>
+<div class="bg-tertiary-container/10 p-3 rounded-xl border border-tertiary/10">
+<span class="block text-[10px] uppercase font-bold text-tertiary mb-1">Time Left</span>
+<span class="text-lg font-black font-headline text-tertiary">14h 12m</span>
+</div>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98] transition-all">Place Bid</button>
+</div>
+</div>
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_8px_32px_0_rgba(19,27,46,0.04)] hover:shadow-[0_12px_48px_0_rgba(19,27,46,0.08)] transition-all duration-300">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="vintage silver sports car in a minimalist modern showroom with soft cinematic lighting and reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAczCEozYSl9EPrvs7E6oB1lgWiuMiipQ0MMu0YudBYrjgSiLAT0FXQCsvnqVJp4oUEHd4pmctpf6hfcyBOuteM4QhinqgxBs1zYHsw7j7bVLA6X6tRZ5fH6jKtLVkoq_PV0pISgVEaRvlqZIXudmSuHGbQFRzx48j6Jf89T5NGHjuTuvrlZsb63az08S4MDupHaAQUqQw4DtxdDVwSj-FSOo1o8WiFLl0pdY-YHUgcy8QyXprziaVII4okA-0QdrlR7OKZMrfz0uU"/>
+<div class="absolute top-4 left-4 bg-secondary-container/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
+<span class="text-[10px] font-black uppercase tracking-widest text-on-secondary-container">Live Bidding</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold font-headline text-on-surface group-hover:text-primary transition-colors">1967 Porsche 911 S</h3>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-error transition-colors">favorite</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-1">Fully restored, matching numbers. Silver Metallic.</p>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-low p-3 rounded-xl">
+<span class="block text-[10px] uppercase font-bold text-on-surface-variant mb-1">Current Bid</span>
+<span class="text-lg font-black font-headline text-primary">$182,000</span>
+</div>
+<div class="bg-tertiary-container/10 p-3 rounded-xl border border-tertiary/10">
+<span class="block text-[10px] uppercase font-bold text-tertiary mb-1">Time Left</span>
+<span class="text-lg font-black font-headline text-tertiary">2d 06h</span>
+</div>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98] transition-all">Place Bid</button>
+</div>
+</div>
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_8px_32px_0_rgba(19,27,46,0.04)] hover:shadow-[0_12px_48px_0_rgba(19,27,46,0.08)] transition-all duration-300">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="rare bottle of vintage single malt scotch whiskey on a dark wood table with warm ambient bar lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6_sSILlvRAsqqrJgKE4nUBcSde7EMksTK8puDbyulXEf63t0Cj6A9o9wgRqxqeDFsi7wL4b0amzme8Xh1C79OqSNA1vIGseRfUs8gBoNdGp8X1F8S80qYXeAXVZLVjEeeGTKT0yUtOYU2_m1xphwSk4PIwi5cETFU8XX9KAAOtiIIPtvpWYnv0VjdCWVMEEJA5dxB_Vf0_ztp5MwlK79qPQCsO04JbSIIw7PNqGWumFzkjQUyqnZ0rIVccgGazwBHrCsQqPErm3U"/>
+<div class="absolute top-4 left-4 bg-secondary-container/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
+<span class="text-[10px] font-black uppercase tracking-widest text-on-secondary-container">Live Bidding</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold font-headline text-on-surface group-hover:text-primary transition-colors">Macallan 1952 Rare</h3>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-error transition-colors">favorite</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-1">700ml Bottle, original wooden casket and certificate.</p>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-low p-3 rounded-xl">
+<span class="block text-[10px] uppercase font-bold text-on-surface-variant mb-1">Current Bid</span>
+<span class="text-lg font-black font-headline text-primary">$8,900</span>
+</div>
+<div class="bg-tertiary-container/10 p-3 rounded-xl border border-tertiary/10">
+<span class="block text-[10px] uppercase font-bold text-tertiary mb-1">Time Left</span>
+<span class="text-lg font-black font-headline text-tertiary">08h 21m</span>
+</div>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98] transition-all">Place Bid</button>
+</div>
+</div>
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_8px_32px_0_rgba(19,27,46,0.04)] hover:shadow-[0_12px_48px_0_rgba(19,27,46,0.08)] transition-all duration-300">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="architectural photograph of a modern designer chair in a bright minimalist gallery space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl7MTVQOrygVk37o3bLNbKD2y2gUPgjffahxkG8tcgsPCjeied_OL3KmQY9Pdy6HgXh5NCu0qoWoPofAS4LVlEnbuolHqZx-taBhq9qYLkBt-PSZ8Mg6BbQTzniZJwZH4A25zjNfH5IU0Z3BixtbGC3WtG7MYsuHyTfg2ao7l1XSIc7BsG0_2Lwl4tSvLJhPw4YzzVO--tHf004-8gkajKVDvY3WHewrSCvoBtHE5gZurW_uhXGsVMKOcOgE8juaK7CQRt0tDdnQ8"/>
+<div class="absolute top-4 left-4 bg-secondary-container/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
+<span class="text-[10px] font-black uppercase tracking-widest text-on-secondary-container">Live Bidding</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold font-headline text-on-surface group-hover:text-primary transition-colors">Eames Lounger, 1974</h3>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-error transition-colors">favorite</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-1">Original production, Herman Miller. Brazilian Rosewood.</p>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-low p-3 rounded-xl">
+<span class="block text-[10px] uppercase font-bold text-on-surface-variant mb-1">Current Bid</span>
+<span class="text-lg font-black font-headline text-primary">$6,200</span>
+</div>
+<div class="bg-tertiary-container/10 p-3 rounded-xl border border-tertiary/10">
+<span class="block text-[10px] uppercase font-bold text-tertiary mb-1">Time Left</span>
+<span class="text-lg font-black font-headline text-tertiary">01d 19h</span>
+</div>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98] transition-all">Place Bid</button>
+</div>
+</div>
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_8px_32px_0_rgba(19,27,46,0.04)] hover:shadow-[0_12px_48px_0_rgba(19,27,46,0.08)] transition-all duration-300">
+<div class="relative aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="macro detail of an ancient bronze sculpture with complex patina in a museum lighting setup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-JFbjGvrj-qNH7TfPntCDWTL3U1piZ1AU_Bd7F4ziiIe7-rWyRqtg8AFdIkmx0CYXg8MCnuHvNm3AEU3-DGvR81I_FGFEZ2Hxq2s54Bb69p1PpeJTCrIkAOyE_cPLmyBdXLGEiV_TLqw1Qo4J4yxa0TWC6uqGOyeWuUNGz2e6Qe2xdRPnXN3YNaM0WTHMus1Nu9OccsrHATt09Fr7Mmq2m6H3SL7sATMake_02rggix8UFA7zLgE-m8qAldmacgee1DC2qbhiSyY"/>
+<div class="absolute top-4 left-4 bg-secondary-container/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
+<span class="text-[10px] font-black uppercase tracking-widest text-on-secondary-container">Live Bidding</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold font-headline text-on-surface group-hover:text-primary transition-colors">Hellenistic Bronze Torso</h3>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-error transition-colors">favorite</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 line-clamp-1">Provenance confirmed. Circa 1st Century BC.</p>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-low p-3 rounded-xl">
+<span class="block text-[10px] uppercase font-bold text-on-surface-variant mb-1">Current Bid</span>
+<span class="text-lg font-black font-headline text-primary">$215,000</span>
+</div>
+<div class="bg-tertiary-container/10 p-3 rounded-xl border border-tertiary/10">
+<span class="block text-[10px] uppercase font-bold text-tertiary mb-1">Time Left</span>
+<span class="text-lg font-black font-headline text-tertiary">03d 11h</span>
+</div>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98] transition-all">Place Bid</button>
+</div>
+</div>
+</div>
+<div class="mt-20 flex flex-col items-center gap-6">
+<p class="text-on-surface-variant text-sm font-medium">Displaying 6 of 1,248 exclusive lots</p>
+<button class="group px-8 py-4 bg-surface-container-high hover:bg-primary-fixed text-on-surface-variant hover:text-on-primary-fixed-variant rounded-full font-bold transition-all duration-300 flex items-center gap-2">
+                        Load More Auctions
+                        <span class="material-symbols-outlined group-hover:translate-y-1 transition-transform">keyboard_arrow_down</span>
+</button>
+<div class="flex gap-2 mt-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold">1</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high font-bold transition-colors">2</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high font-bold transition-colors">3</button>
+<span class="w-10 h-10 flex items-center justify-center text-on-surface-variant">...</span>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high font-bold transition-colors">42</button>
+</div>
+</div>
+</section>
+</main>
+</div>
+<footer class="bg-surface-container-low border-t border-transparent pt-16 pb-8 px-8">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+<div class="col-span-1 md:col-span-2">
+<span class="text-2xl font-black text-primary tracking-tighter block mb-6">The Auction Curator</span>
+<p class="text-on-surface-variant max-w-sm mb-8 leading-relaxed">The premier destination for the world's most exceptional assets. Our curated platform connects discerning collectors with masterpieces of history, art, and engineering.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">share</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">mail</span>
+</a>
+</div>
+</div>
+<div>
+<h4 class="font-bold font-headline text-on-surface mb-6 uppercase tracking-widest text-xs">Navigation</h4>
+<ul class="space-y-4">
+<li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Active Auctions</a></li>
+<li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Private Treaty Sales</a></li>
+<li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Collector's Journal</a></li>
+<li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Sell with Us</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold font-headline text-on-surface mb-6 uppercase tracking-widest text-xs">Curator Trust</h4>
+<ul class="space-y-4">
+<li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Authenticity Guarantee</a></li>
+<li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Escrow Protection</a></li>
+<li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Global Logistics</a></li>
+<li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant/60">
+<span>© 2024 The Auction Curator Global Limited</span>
+<div class="flex gap-8">
+<span>All Rights Reserved</span>
+<span>Terms of Service</span>
+</div>
+</div>
+</footer>
+</body></html>

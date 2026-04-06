@@ -3,50 +3,73 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
+  const [auctions, setAuctions] = useState([]);
   const [trending, setTrending] = useState([]);
 
   useEffect(() => {
-    const fetchTrending = async () => {
+    const fetchAuctions = async () => {
       try {
         const { data } = await axios.get('http://localhost:5000/api/auctions');
+        setAuctions(data);
         // Just take the first 4 for the home page mockup
         setTrending(data.slice(0, 4));
       } catch (error) {
-        console.error('Error fetching trending auctions:', error);
+        console.error('Error fetching auctions:', error);
       }
     };
-    fetchTrending();
+    fetchAuctions();
   }, []);
+
+  const featuredAuction = auctions.length > 0 ? auctions[auctions.length - 1] : null;
+
+  const categoryCounts = auctions.reduce((acc, curr) => {
+    const cat = curr.category || 'Uncategorized';
+    acc[cat] = (acc[cat] || 0) + 1;
+    return acc;
+  }, {});
+  
+  const topCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
 
   return (
     <>
       <main className="max-w-[1600px] mx-auto px-8 pb-24">
         {/* Hero Section: Featured Carousel */}
         <section className="mt-8 mb-16">
-          <div className="relative w-full h-[600px] rounded-3xl overflow-hidden bg-surface-container-low group">
-            <img 
-              alt="Main Featured Auction" 
-              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzHjxTnsxM0t7MrrH3Yb4-LrQ_taS6ZF1FeESRSXDxVi3HzTiUjKglITq3XjQ3FH4xs7ZNF0TrYigq9kQm-aSbHogppw5wn4d1WMRJ372FbQa_HsGwlpQOkxK7PFnV0YeHUZwIIKO2EASg6l1W9MQTIF2XEiXlJCiOrFB8okh5w5wJHZg5q-VW5zylb9atoUeXNpznZhJWihlBDuPRvrkPK-uje3-Ngnb9abmzGFEqxOLMBEZcweGsFV6Q7tNGolP5cO9_f3GzUiU" 
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-on-surface/80 via-on-surface/40 to-transparent flex flex-col justify-center px-8 sm:px-16">
-              <div className="inline-flex items-center gap-2 bg-secondary-container text-on-secondary-container px-4 py-1.5 rounded-full mb-6 w-fit">
-                <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
-                <span className="text-xs font-bold tracking-widest uppercase font-label">Live Bidding Now</span>
-              </div>
-              <h1 className="text-5xl sm:text-6xl font-black text-white leading-tight mb-4 max-w-2xl tracking-tighter shadow-sm">The Vanguard Collection: Contemporary Masterpieces</h1>
-              <p className="text-xl text-surface-container-high mb-8 max-w-xl font-body drop-shadow-md">Exclusive access to primary market releases from emerging global talents. Curated for the discerning collector.</p>
-              <div className="flex flex-col sm:flex-row sm:items-center gap-6">
-                <Link to="/dashboard" className="bg-gradient-to-r from-primary to-primary-container text-white px-10 py-4 rounded-full font-bold text-lg hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95 text-center">
-                  Explore Gallery
-                </Link>
-                <div className="flex flex-col">
-                  <span className="text-surface-container-high text-xs uppercase font-label tracking-widest drop-shadow-sm">Current High Bid</span>
-                  <span className="text-white text-2xl font-black headline tracking-tight drop-shadow-md">$14,500</span>
+          {featuredAuction ? (
+            <div className="relative w-full h-[600px] rounded-3xl overflow-hidden bg-surface-container-low group">
+              <img 
+                alt={featuredAuction.title} 
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+                src={featuredAuction.images && featuredAuction.images.length > 0 ? featuredAuction.images[0] : 'https://placehold.co/1200x600/e2e8f0/64748b?text=Featured+Auction'} 
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-on-surface/80 via-on-surface/40 to-transparent flex flex-col justify-center px-8 sm:px-16">
+                <div className="inline-flex items-center gap-2 bg-secondary-container text-on-secondary-container px-4 py-1.5 rounded-full mb-6 w-fit">
+                  <span className={`w-2 h-2 rounded-full ${featuredAuction.status === 'active' ? 'bg-secondary animate-pulse' : 'bg-outline'}`}></span>
+                  <span className="text-xs font-bold tracking-widest uppercase font-label">
+                    {featuredAuction.status === 'active' ? 'Live Bidding Now' : 'Featured Collection'}
+                  </span>
+                </div>
+                <h1 className="text-5xl sm:text-6xl font-black text-white leading-tight mb-4 max-w-2xl tracking-tighter shadow-sm">{featuredAuction.title}</h1>
+                <p className="text-xl text-surface-container-high mb-8 max-w-xl font-body drop-shadow-md line-clamp-3">{featuredAuction.description}</p>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+                  <Link to={`/auction/${featuredAuction._id}`} className="bg-gradient-to-r from-primary to-primary-container text-white px-10 py-4 rounded-full font-bold text-lg hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95 text-center">
+                    View Masterpiece
+                  </Link>
+                  <div className="flex flex-col">
+                    <span className="text-surface-container-high text-xs uppercase font-label tracking-widest drop-shadow-sm">Current High Bid</span>
+                    <span className="text-white text-2xl font-black headline tracking-tight drop-shadow-md">
+                      ${featuredAuction.currentBid > 0 ? featuredAuction.currentBid.toLocaleString() : featuredAuction.startingBid.toLocaleString()}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="w-full h-[600px] rounded-3xl bg-surface-container flex flex-col gap-4 items-center justify-center">
+               <span className="material-symbols-outlined text-4xl text-on-surface-variant">hourglass_empty</span>
+               <p className="text-on-surface-variant text-xl font-bold">Waiting for auctions to be posted...</p>
+            </div>
+          )}
         </section>
 
         {/* Categories: Visual Bento */}
@@ -61,27 +84,26 @@ const Home = () => {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:h-[400px]">
-            <div className="md:col-span-2 relative group cursor-pointer overflow-hidden rounded-2xl bg-surface-container h-[300px] md:h-auto">
-              <img alt="Fine Art" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAafJlYslHCWRsEt_5bpeqNwlWpO3E52G0Pi22R7C4QSiscH2Oq5LWInopQHpire3cHz60m--3VQa_Ws8LHGJRewrL1g0RyOwaiHUEnfWrc1Dqt2iJfJfMOXKo4YO4LSJEu6EjJl2FPBn059uN2UYPstAx__iAlD9mFST8At2B5PL7WGi9HmpUQmFHeQEbjEiIGtSN2PysZKuuF7_ww22UpI3TftGMNfgW21mdWjPnujIxwAFaTOp0RAGHYwxkygvpQX8Ni15DRKrQ" />
-              <div className="absolute inset-0 bg-on-surface/40 flex flex-col justify-end p-8">
-                <h3 className="text-white text-3xl font-black headline">Fine Art</h3>
-                <p className="text-white/80 font-body">1,240 Items</p>
+            {topCategories.length > 0 ? topCategories.map(([cat, count], index) => {
+              const bgImages = [
+                "https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?auto=format&fit=crop&q=80&w=1000",
+                "https://images.unsplash.com/photo-1550537687-c9a0ed967fc8?auto=format&fit=crop&q=80&w=1000",
+                "https://images.unsplash.com/photo-1611145367651-63028d7a1b41?auto=format&fit=crop&q=80&w=1000"
+              ];
+              return (
+                <Link to="/browse" key={cat} className={`${index === 0 ? 'md:col-span-2' : ''} relative group cursor-pointer overflow-hidden rounded-2xl bg-surface-container h-[200px] md:h-auto`}>
+                  <img alt={cat} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src={bgImages[index % bgImages.length]} />
+                  <div className="absolute inset-0 bg-on-surface/40 flex flex-col justify-end p-8">
+                    <h3 className="text-white text-2xl font-black headline">{cat}</h3>
+                    <p className="text-white/80 font-body">{count} {count === 1 ? 'Item' : 'Items'}</p>
+                  </div>
+                </Link>
+              );
+            }) : (
+              <div className="md:col-span-4 p-12 text-center text-on-surface-variant bg-surface-container rounded-2xl">
+                Start listing auctions to populate categories.
               </div>
-            </div>
-            <div className="relative group cursor-pointer overflow-hidden rounded-2xl bg-surface-container h-[200px] md:h-auto">
-              <img alt="Tech &amp; Gadgets" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlL1ocL1a2sTlh3or_FQXFbiJTID3aULgkUS85spBjFiVKnHgZPerWFYS12FOdx7uchW3AOztbTLN4wIcaADMtxEBzhoim9nSwbXVuwFd6w0nhaLrXZYLKiIylqh5ItfFV_phyLLE7n0BsroMBWiHP3VsUnh3zdfJyHwqM5Me6nimlZfADtAzkttnS9J_TpblRKfmdx0dflbdxTfhL1BXDKNU6usPnelfFHQCTwAHHMivg9zlko1ZIQO3yWSHh8QJWJsMzd451IbA" />
-              <div className="absolute inset-0 bg-on-surface/40 flex flex-col justify-end p-6">
-                <h3 className="text-white text-xl font-black headline">Tech &amp; Innovation</h3>
-                <p className="text-white/80 font-body">480 Items</p>
-              </div>
-            </div>
-            <div className="relative group cursor-pointer overflow-hidden rounded-2xl bg-surface-container h-[200px] md:h-auto">
-              <img alt="Collectibles" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1d06cC-EGP4mmIUbJX9Alub8qshj7WsOHskAxW_ctfOESVglVbbxeTWE81hwyEzHXvmN3pSHhZ5Jjb3JxeIBLA-XGZEuwEKOxAL_wtLO8Mtcx6lhuOZA7MIyUxdacRfL4gK63Of3DBqPvKF3vx5UftgWB9dlllfkre2ffMIyJJ-GaDuQWx2yIkkRdtxkR-a4I5MQdiaU_GcybR1wYF8Xo-MdkpXPL57eUO4wmNm2awU1U6tQRNGGKd6_ZwywgJxft9zdPUHvH-IA" />
-              <div className="absolute inset-0 bg-on-surface/40 flex flex-col justify-end p-6">
-                <h3 className="text-white text-xl font-black headline">Collectibles</h3>
-                <p className="text-white/80 font-body">892 Items</p>
-              </div>
-            </div>
+            )}
           </div>
         </section>
 

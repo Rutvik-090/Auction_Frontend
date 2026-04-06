@@ -1,17 +1,25 @@
-import React, { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, error } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
+  const { showNotification } = useNotification();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await login(email, password);
-    navigate('/dashboard');
+    try {
+      await login(email, password);
+      showNotification('Welcome back to the curation platform!', 'success');
+      navigate('/');
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || 'Authentication Failed. Please check your credentials.';
+      showNotification(errorMsg, 'error');
+    }
   };
 
   return (
@@ -21,19 +29,7 @@ const Login = () => {
         <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-primary-fixed/30 rounded-full blur-3xl"></div>
         <div className="absolute bottom-[-10%] left-[-5%] w-80 h-80 bg-secondary-container/20 rounded-full blur-3xl"></div>
 
-        {error && (
-          <div className="fixed top-24 right-8 z-[100] max-w-sm w-full">
-            <div className="bg-surface-container-lowest border-l-4 border-error p-4 shadow-[0_8px_32px_0_rgba(19,27,46,0.06)] rounded-xl flex items-start gap-3">
-              <span className="material-symbols-outlined text-error" style={{ fontVariationSettings: "'FILL' 0, 'wght' 400" }}>error</span>
-              <div>
-                <p className="font-headline font-bold text-sm text-on-surface">Authentication Failed</p>
-                <p className="text-on-surface-variant text-xs mt-1">{error}</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <main className="w-full max-w-[440px] z-10">
+        <main className="w-full max-w-[440px] z-10 mt-8">
           {/* Brand Identity */}
           <div className="text-center mb-10">
             <h1 className="font-headline text-3xl font-black text-primary tracking-tighter mb-2">The Auction Curator</h1>

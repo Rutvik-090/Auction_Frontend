@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
@@ -9,22 +9,38 @@ const CreateAuction = () => {
   const [startingBid, setStartingBid] = useState('');
   const [endTime, setEndTime] = useState('');
   const [error, setError] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
   
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsUploading(true);
+    let images = [];
     try {
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append('image', imageFile);
+        const { data } = await axios.post('http://localhost:5000/api/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        images.push(data.url);
+      }
+
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       await axios.post(
         'http://localhost:5000/api/auctions',
-        { title, description, startingBid: Number(startingBid), endTime },
+        { title, description, startingBid: Number(startingBid), endTime, images },
         config
       );
-      navigate('/dashboard');
+      navigate('/browse');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create auction');
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -80,9 +96,32 @@ const CreateAuction = () => {
               />
             </div>
           </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Auction Image (Optional)</label>
+            <div className="flex items-center gap-4">
+              <div className="w-24 h-24 rounded-xl bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200 shrink-0">
+                {imagePreview ? (
+                  <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-slate-400 text-sm font-medium">No Image</span>
+                )}
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files[0]) {
+                    setImageFile(e.target.files[0]);
+                    setImagePreview(URL.createObjectURL(e.target.files[0]));
+                  }
+                }}
+                className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+              />
+            </div>
+          </div>
           <div className="pt-4">
-            <button type="submit" className="w-full btn-primary text-lg font-semibold py-3">
-              Launch Auction
+            <button type="submit" className="w-full btn-primary text-lg font-semibold py-3" disabled={isUploading}>
+              {isUploading ? 'Uploading Image & Launching...' : 'Launch Auction'}
             </button>
           </div>
         </form>

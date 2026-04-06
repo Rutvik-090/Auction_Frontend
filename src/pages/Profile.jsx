@@ -15,6 +15,9 @@ const Profile = () => {
 
   const [message, setMessage] = useState({ type: '', text: '' });
   const [loading, setLoading] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState(user?.avatar || '');
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,6 +29,17 @@ const Profile = () => {
     setMessage({ type: '', text: '' });
 
     try {
+      let currentFormData = { ...formData };
+      if (avatarFile) {
+        setIsUploading(true);
+        const fileData = new FormData();
+        fileData.append('image', avatarFile);
+        const { data } = await axios.post('http://localhost:5000/api/upload', fileData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        currentFormData.avatar = data.url;
+      }
+
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +47,7 @@ const Profile = () => {
         },
       };
 
-      const res = await axios.put('http://localhost:5000/api/auth/profile', formData, config);
+      const res = await axios.put('http://localhost:5000/api/auth/profile', currentFormData, config);
       
       // Update local storage and context
       localStorage.setItem('token', res.data.token);
@@ -45,6 +59,7 @@ const Profile = () => {
     } catch (error) {
       setMessage({ type: 'error', text: error.response?.data?.message || 'Update failed.' });
     } finally {
+      setIsUploading(false);
       setLoading(false);
     }
   };
@@ -62,8 +77,28 @@ const Profile = () => {
 
       <div className="w-full max-w-2xl bg-surface-container-lowest/80 backdrop-blur-xl rounded-3xl shadow-[0_8px_32px_0_rgba(19,27,46,0.04)] border border-outline-variant/30 p-8 md:p-12 relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="flex flex-col items-center mb-10">
-          <div className="w-24 h-24 rounded-full bg-primary flex items-center justify-center text-white text-3xl font-black headline ring-4 ring-primary/10 shadow-xl mb-6">
-            {user?.name?.charAt(0).toUpperCase()}
+          <div className="relative group w-24 h-24 mb-6">
+            <div className="w-full h-full rounded-full bg-primary flex items-center justify-center text-white text-3xl font-black headline ring-4 ring-primary/10 shadow-xl overflow-hidden">
+              {avatarPreview ? (
+                <img src={avatarPreview} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                user?.name?.charAt(0).toUpperCase()
+              )}
+            </div>
+            <label className="absolute inset-0 flex items-center justify-center bg-black/50 text-white rounded-full opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
+              <span className="material-symbols-outlined">photo_camera</span>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  if (e.target.files[0]) {
+                    setAvatarFile(e.target.files[0]);
+                    setAvatarPreview(URL.createObjectURL(e.target.files[0]));
+                  }
+                }}
+              />
+            </label>
           </div>
           <h1 className="text-3xl font-black headline tracking-tighter text-on-surface">Your Profile</h1>
           <p className="text-sm text-on-surface-variant mt-2 font-medium">Manage your curator identity and security preferences.</p>
@@ -116,10 +151,10 @@ const Profile = () => {
           <div className="pt-8 flex flex-col md:flex-row items-center gap-4 border-t border-outline-variant/20 mt-8">
             <button 
               type="submit" 
-              disabled={loading}
+              disabled={loading || isUploading}
               className="w-full md:w-auto flex-1 bg-gradient-to-r from-primary to-primary-container text-white py-3 px-8 rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all outline-none"
             >
-              {loading ? 'Saving...' : 'Save Changes'}
+              {loading || isUploading ? 'Saving...' : 'Save Changes'}
             </button>
             <button 
               type="button" 

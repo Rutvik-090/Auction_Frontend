@@ -1,16 +1,16 @@
-import React, { useContext } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import { AuthContext } from './context/AuthContext';
+import AuctionDetails from './pages/AuctionDetails';
+import AuctionListing from './pages/AuctionListing';
+import CreateAuction from './pages/CreateAuction';
+import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import NotFound from './pages/NotFound';
+import Profile from './pages/Profile';
 import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import Browse from './pages/Browse';
-import CreateAuction from './pages/CreateAuction';
-import AuctionDetails from './pages/AuctionDetails';
-import AdminDashboard from './pages/AdminDashboard';
-import Checkout from './pages/Checkout';
-import { AuthContext } from './context/AuthContext';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -27,13 +27,17 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-          <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
+          {/* <Route path="/home" element={<Home/>} /> */}
+          <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+          <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/browse" element={<Browse />} />
+          <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path="/browse" element={<AuctionListing />} />
           <Route path="/create-auction" element={<PrivateRoute><CreateAuction /></PrivateRoute>} />
           <Route path="/auction/:id" element={<AuctionDetails />} />
-          <Route path="/admin" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
+         
+          
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
     </div>
