@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import { useContext, useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import io from 'socket.io-client';
 import { AuthContext } from '../context/AuthContext';
 
@@ -15,6 +15,7 @@ const AuctionDetails = () => {
   const [success, setSuccess] = useState('');
   const [bidHistory, setBidHistory] = useState([]);
   const [liveToast, setLiveToast] = useState(null);
+  const [timeLeft, setTimeLeft] = useState('');
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -57,6 +58,37 @@ const AuctionDetails = () => {
       socket.off('new_bid');
     };
   }, [id]);
+
+  useEffect(() => {
+    if (!auction?.endTime || auction.status !== 'active') {
+       if (auction?.status === 'ended') setTimeLeft('Auction Closed');
+       return;
+    }
+    
+    // Initial display
+    const updateTime = () => {
+      const now = new Date().getTime();
+      const distance = new Date(auction.endTime).getTime() - now;
+
+      if (distance < 0) {
+        setTimeLeft('Closing...');
+      } else {
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        let display = '';
+        if (days > 0) display += `${days}d `;
+        display += `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        setTimeLeft(display);
+      }
+    };
+    updateTime();
+    
+    const intervalId = setInterval(updateTime, 1000);
+    return () => clearInterval(intervalId);
+  }, [auction?.endTime, auction?.status]);
 
   const handleBid = async (e) => {
     e.preventDefault();
@@ -136,17 +168,19 @@ const AuctionDetails = () => {
               <div className="grid grid-cols-2 gap-8 relative z-10">
                 <div className="space-y-1">
                   <span className="text-[10px] font-bold text-outline uppercase tracking-widest">Current Bid</span>
-                  <div className="text-4xl font-headline font-black text-primary">${auction.currentBid.toLocaleString()}</div>
+                  <div className="text-4xl font-mono font-black text-primary">${auction.currentBid.toLocaleString()}</div>
                   {auction.highestBidder?.name && (
                      <span className="text-xs text-primary/80 font-bold block mt-1">Leading: {auction.highestBidder.name}</span>
                   )}
                 </div>
                 <div className="space-y-1 text-right">
-                  <span className="text-[10px] font-bold text-outline uppercase tracking-widest">{auction.status === 'active' ? 'Ends On' : 'Ended On'}</span>
-                  <div className="text-xl font-headline font-black text-on-surface-variant tracking-tight mt-1">
-                    {new Date(auction.endTime).toLocaleDateString()}
+                  <span className="text-[10px] font-bold text-outline uppercase tracking-widest">{auction.status === 'active' ? 'Time Remaining' : 'Status'}</span>
+                  <div className="text-2xl lg:text-3xl font-mono font-black text-on-surface tracking-tighter mt-1">
+                    {timeLeft || '---'}
                   </div>
-                  <span className="text-xs font-bold text-on-surface-variant">{new Date(auction.endTime).toLocaleTimeString()}</span>
+                  <span className="text-xs font-mono font-bold text-outline mt-1 block">
+                    {auction.status === 'active' ? 'Closes:' : 'Closed:'} {new Date(auction.endTime).toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  </span>
                 </div>
               </div>
 
@@ -230,11 +264,11 @@ const AuctionDetails = () => {
                        <li key={index} className={`p-5 flex justify-between items-center transition-colors ${index === 0 ? 'bg-primary/5' : 'hover:bg-surface-container-low'}`}>
                           <div>
                             <p className={`font-bold text-sm ${index === 0 ? 'text-primary' : 'text-on-surface'}`}>{bid.bidder?.name || 'Unknown'}</p>
-                            <p className="text-[10px] text-outline font-bold tracking-widest mt-1">
+                            <p className="text-[10px] text-outline font-mono font-bold tracking-widest mt-1">
                               {new Date(bid.time).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
                             </p>
                           </div>
-                          <div className={`font-headline font-black ${index === 0 ? 'text-xl text-primary' : 'text-lg text-on-surface-variant'}`}>
+                          <div className={`font-mono font-black ${index === 0 ? 'text-xl text-primary' : 'text-lg text-on-surface-variant'}`}>
                             ${bid.amount.toLocaleString()}
                           </div>
                        </li>
@@ -289,7 +323,7 @@ const AuctionDetails = () => {
                       <div className="pt-4 border-t border-outline-variant/10 flex justify-between items-end mt-2">
                         <div>
                           <p className="text-[10px] uppercase text-outline font-bold tracking-widest mb-0.5">Current Bid</p>
-                          <p className="text-lg font-black headline text-on-surface">${item.currentBid > 0 ? item.currentBid.toLocaleString() : item.startingBid.toLocaleString()}</p>
+                          <p className="text-lg font-black font-mono text-on-surface">${item.currentBid > 0 ? item.currentBid.toLocaleString() : item.startingBid.toLocaleString()}</p>
                         </div>
                         <div className="text-primary font-black text-sm group-hover:translate-x-1 transition-transform flex items-center gap-1">
                           View <span className="material-symbols-outlined text-sm">arrow_forward</span>
