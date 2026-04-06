@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -10,7 +10,7 @@
     @apply bg-surface text-on-surface transition-colors duration-300;
   }
   h1, h2, h3, h4, h5, h6, .headline {
-    font-family: 'Manrope', sans-serif;
+    font-family: 'Inter', sans-serif;
   }
 }
 
