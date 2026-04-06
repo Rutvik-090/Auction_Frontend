@@ -111,7 +111,7 @@ const AuctionListing = () => {
     <>
       <div className="flex min-h-screen bg-surface">
         {/* Sidebar */}
-        <aside className="h-full w-64 pt-8 bg-[#f2f3ff] dark:bg-slate-900 flex flex-col gap-1 py-6 border-r-0 z-10 hidden lg:flex rounded-tr-3xl">
+        <aside className="h-full w-64 pt-8 bg-[#f2f3ff] dark:bg-slate-900 flex flex-col gap-1 py-6 border-r-0 z-10  lg:flex rounded-tr-3xl">
           <div className="px-6 py-4 flex flex-col gap-6">
             {/* Search (added for completeness with previous feature) */}
             <div>
