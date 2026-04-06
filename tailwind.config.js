@@ -63,9 +63,11 @@ export default {
                 "full": "9999px"
             },
             "fontFamily": {
-                "headline": ["Manrope"],
-                "body": ["Inter"],
-                "label": ["Inter"]
+                "headline": ["Inter", "sans-serif"],
+                "body": ["Inter", "sans-serif"],
+                "label": ["Inter", "sans-serif"],
+                "mono": ["Inter", "sans-serif"],
+                "numbers": ["Inter", "sans-serif"]
             }
         },
     },
