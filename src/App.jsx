@@ -1,16 +1,17 @@
-import { useContext } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import { AuthContext } from './context/AuthContext';
-import AuctionDetails from './pages/AuctionDetails';
-import AuctionListing from './pages/AuctionListing';
-import CreateAuction from './pages/CreateAuction';
-import Dashboard from './pages/Dashboard';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import NotFound from './pages/NotFound';
-import Profile from './pages/Profile';
-import Register from './pages/Register';
+import { useContext } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import { AuthContext } from "./context/AuthContext";
+import AuctionDetails from "./pages/AuctionDetails";
+import AuctionListing from "./pages/AuctionListing";
+import Checkout from "./pages/Checkout";
+import CreateAuction from "./pages/CreateAuction";
+import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile";
+import Register from "./pages/Register";
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -28,15 +29,49 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           {/* <Route path="/home" element={<Home/>} /> */}
-          <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-          <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
-          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route
+            path="/login"
+            element={!user ? <Login /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/register"
+            element={!user ? <Register /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
           <Route path="/browse" element={<AuctionListing />} />
-          <Route path="/create-auction" element={<PrivateRoute><CreateAuction /></PrivateRoute>} />
+          <Route
+            path="/create-auction"
+            element={
+              <PrivateRoute>
+                <CreateAuction />
+              </PrivateRoute>
+            }
+          />
           <Route path="/auction/:id" element={<AuctionDetails />} />
-         
-          
+          <Route
+            path="/checkout/:id"
+            element={
+              <PrivateRoute>
+                <Checkout />
+              </PrivateRoute>
+            }
+          />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
