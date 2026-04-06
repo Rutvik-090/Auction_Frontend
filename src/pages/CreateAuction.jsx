@@ -1,11 +1,13 @@
 import axios from 'axios';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const CreateAuction = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState('');
   const [startingBid, setStartingBid] = useState('');
   const [endTime, setEndTime] = useState('');
   const [error, setError] = useState('');
@@ -15,6 +17,19 @@ const CreateAuction = () => {
   
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+         const { data } = await axios.get('http://localhost:5000/api/categories');
+         setCategories(data);
+         if (data.length > 0) setCategory(data[0].name);
+      } catch (err) {
+         console.error('Failed to load categories', err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +48,7 @@ const CreateAuction = () => {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       await axios.post(
         'http://localhost:5000/api/auctions',
-        { title, description, startingBid: Number(startingBid), endTime, images },
+        { title, description, category, startingBid: Number(startingBid), endTime, images },
         config
       );
       navigate('/browse');
@@ -50,16 +65,32 @@ const CreateAuction = () => {
         <h2 className="text-3xl font-extrabold text-slate-900 mb-6">Create New Auction</h2>
         {error && <div className="text-red-500 mb-4 bg-red-50 p-3 rounded-lg border border-red-100">{error}</div>}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Item Title</label>
-            <input
-              type="text"
-              required
-              className="input-field"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g., Vintage Rolex Submariner"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Item Title</label>
+              <input
+                type="text"
+                required
+                className="input-field"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="e.g., Vintage Rolex Submariner"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Collection Department</label>
+              <select
+                required
+                className="input-field cursor-pointer"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                {categories.length === 0 && <option value="" disabled>No categories available</option>}
+                {categories.map((cat) => (
+                   <option key={cat._id} value={cat.name}>{cat.name}</option>
+                ))}
+              </select>
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Description</label>
