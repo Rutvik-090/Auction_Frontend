@@ -1,31 +1,33 @@
-import axios from 'axios';
-import { useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const CreateAuction = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [categories, setCategories] = useState([]);
-  const [category, setCategory] = useState('');
-  const [startingBid, setStartingBid] = useState('');
-  const [endTime, setEndTime] = useState('');
-  const [error, setError] = useState('');
+  const [category, setCategory] = useState("");
+  const [startingBid, setStartingBid] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [error, setError] = useState("");
   const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState('');
+  const [imagePreview, setImagePreview] = useState("");
   const [isUploading, setIsUploading] = useState(false);
-  
+
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-         const { data } = await axios.get('http://localhost:5000/api/categories');
-         setCategories(data);
-         if (data.length > 0) setCategory(data[0].name);
+        const { data } = await axios.get(
+          "http://localhost:5000/api/categories",
+        );
+        setCategories(data);
+        if (data.length > 0) setCategory(data[0].name);
       } catch (err) {
-         console.error('Failed to load categories', err);
+        console.error("Failed to load categories", err);
       }
     };
     fetchCategories();
@@ -38,22 +40,33 @@ const CreateAuction = () => {
     try {
       if (imageFile) {
         const formData = new FormData();
-        formData.append('image', imageFile);
-        const { data } = await axios.post('http://localhost:5000/api/upload', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        formData.append("image", imageFile);
+        const { data } = await axios.post(
+          "http://localhost:5000/api/upload",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          },
+        );
         images.push(data.url);
       }
 
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       await axios.post(
-        'http://localhost:5000/api/auctions',
-        { title, description, category, startingBid: Number(startingBid), endTime, images },
-        config
+        "http://localhost:5000/api/auctions",
+        {
+          title,
+          description,
+          category,
+          startingBid: Number(startingBid),
+          endTime,
+          images,
+        },
+        config,
       );
-      navigate('/browse');
+      navigate("/browse");
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to create auction');
+      setError(err.response?.data?.message || "Failed to create auction");
     } finally {
       setIsUploading(false);
     }
@@ -62,12 +75,20 @@ const CreateAuction = () => {
   return (
     <div className="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <div className="glass p-8 rounded-2xl border border-slate-200">
-        <h2 className="text-3xl font-extrabold text-slate-900 mb-6">Create New Auction</h2>
-        {error && <div className="text-red-500 mb-4 bg-red-50 p-3 rounded-lg border border-red-100">{error}</div>}
+        <h2 className="text-3xl font-extrabold text-slate-900 mb-6">
+          Create New Auction
+        </h2>
+        {error && (
+          <div className="text-red-500 mb-4 bg-red-50 p-3 rounded-lg border border-red-100">
+            {error}
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Item Title</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Item Title
+              </label>
               <input
                 type="text"
                 required
@@ -78,22 +99,32 @@ const CreateAuction = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Collection Department</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Collection Department
+              </label>
               <select
                 required
                 className="input-field cursor-pointer"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               >
-                {categories.length === 0 && <option value="" disabled>No categories available</option>}
+                {categories.length === 0 && (
+                  <option value="" disabled>
+                    No categories available
+                  </option>
+                )}
                 {categories.map((cat) => (
-                   <option key={cat._id} value={cat.name}>{cat.name}</option>
+                  <option key={cat._id} value={cat.name}>
+                    {cat.name}
+                  </option>
                 ))}
               </select>
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Description</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Description
+            </label>
             <textarea
               required
               rows={4}
@@ -105,7 +136,9 @@ const CreateAuction = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Starting Bid ($)</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Starting Bid (₹)
+              </label>
               <input
                 type="number"
                 min="1"
@@ -117,7 +150,9 @@ const CreateAuction = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">End Time</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                End Time
+              </label>
               <input
                 type="datetime-local"
                 required
@@ -128,13 +163,21 @@ const CreateAuction = () => {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Auction Image (Optional)</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Auction Image (Optional)
+            </label>
             <div className="flex items-center gap-4">
               <div className="w-24 h-24 rounded-xl bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200 shrink-0">
                 {imagePreview ? (
-                  <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
-                  <span className="text-slate-400 text-sm font-medium">No Image</span>
+                  <span className="text-slate-400 text-sm font-medium">
+                    No Image
+                  </span>
                 )}
               </div>
               <input
@@ -151,8 +194,14 @@ const CreateAuction = () => {
             </div>
           </div>
           <div className="pt-4">
-            <button type="submit" className="w-full btn-primary text-lg font-semibold py-3" disabled={isUploading}>
-              {isUploading ? 'Uploading Image & Launching...' : 'Launch Auction'}
+            <button
+              type="submit"
+              className="w-full btn-primary text-lg font-semibold py-3"
+              disabled={isUploading}
+            >
+              {isUploading
+                ? "Uploading Image & Launching..."
+                : "Launch Auction"}
             </button>
           </div>
         </form>
